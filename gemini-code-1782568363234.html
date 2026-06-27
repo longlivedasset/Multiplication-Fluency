@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Math Sprint & Fluency Hub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<style>
+:root {
+  --primary: #534AB7;
+  --primary-light: #EEEDFA;
+  --bg: #F9FAFB;
+  --text: #111827;
+  --text-light: #6B7280;
+  --success: #1D9E75;
+  --border: #E5E7EB;
+  --color-border-secondary: #d1d5db;
+  --color-border-tertiary: #e5e7eb;
+  --color-background-secondary: #f3f4f6;
+  --color-background-primary: #fff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  min-height: 100vh; 
+  background-color: var(--bg); 
+  padding: 20px;
+}
+
+.W {
+  padding: 1.5rem 1rem; 
+  max-width: 480px; 
+  width: 100%;
+  margin: 0 auto;
+}
+
+.app-title { font-size: 24px; font-weight: 700; margin-bottom: 1rem; color: var(--text); text-align: center; }
+
+/* Main Navigation Tabs */
+.tn {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+  padding-bottom: 1rem;
+  justify-content: center;
+}
+.tb {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-light);
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.tb.a {
+  background: var(--color-background-primary);
+  border-color: var(--color-border-secondary);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.sec { display: none; }
+.sec.a { display: block; }
+
+/* Card Panels */
+.card { 
+  background: white; 
+  padding: 2rem 1.5rem; 
+  border-radius: 16px; 
+  box-shadow: 0 10px 25px rgba(0,0,0,0.04); 
+  text-align: center; 
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+h2 { margin-top: 0; margin-bottom: 0.25rem; color: var(--text); font-size: 1.5rem; font-weight: 700; }
+.subtitle { color: var(--text-light); font-size: 0.95rem; margin-bottom: 1.5rem; font-weight: 500; }
+
+/* Timers & Stats grids */
+.timer { font-size: 1.75rem; font-weight: bold; color: #D85A30; margin-bottom: 0.5rem; }
+.stats { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.95rem; color: var(--text-light); }
+.st { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+.sc { background: var(--color-background-secondary); border-radius: 8px; padding: .7rem .4rem; text-align: center; }
+.sv { font-size: 20px; font-weight: 600; color: var(--text); }
+.sl { font-size: 11px; color: var(--text-light); margin-top: 2px; text-transform: uppercase; font-weight: 500; }
+
+/* Progress bars */
+.progress-container { background: #E5E7EB; border-radius: 8px; height: 10px; width: 100%; margin-bottom: 1.5rem; overflow: hidden; position: relative; }
+.progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.1s ease; }
+.fp { font-size: 13px; color: var(--text-light); margin-bottom: .5rem; text-align: left; }
+.fpb { height: 6px; background: var(--color-background-secondary); border-radius: 3px; margin-bottom: 1rem; overflow: hidden; }
+.fpf { height: 100%; background: var(--primary); border-radius: 3px; transition: width .3s; width: 0%; }
+
+/* Problem Areas */
+.problem { font-size: 3.5rem; font-weight: bold; margin: 1rem 0; color: var(--text); letter-spacing: -1px; }
+.qc { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: 12px; padding: 2rem 1rem; margin-bottom: 1rem; text-align: center; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem; position: relative; }
+.mq { font-size: 38px; font-weight: 600; letter-spacing: .02em; color: #1c1c1e; }
+.ti-display { font-size: 34px; font-weight: 700; color: var(--primary); min-height: 46px; margin-top: 2px; letter-spacing: 0.05em; }
+.ti-display.empty { color: #cbd5e1; font-weight: 400; font-size: 24px; }
+
+/* Inputs & Buttons */
+input[type="text"] { width: 160px; font-size: 2.2rem; text-align: center; border: 2px solid #D1D5DB; border-radius: 8px; padding: 5px; }
+input[type="text"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(83, 74, 183, 0.2); }
+
+.btn { width: 100%; max-width: 240px; padding: 12px 24px; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.btn:hover { background: #3C3489; }
+.btn:active { transform: scale(.98); }
+
+.btn2 { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--text-light); font-size: 13px; cursor: pointer; font-weight: 500; }
+.btn2.a { background: var(--primary-light) !important; border-color: var(--primary) !important; color: #3C3489 !important; font-weight: 600; }
+
+.fb { font-size: 15px; font-weight: 500; min-height: 22px; }
+.fb.ok { color: #0F6E56; }
+.fb-large { font-size: 28px; font-weight: 700; color: #993C1D; min-height: 36px; margin-top: 4px; }
+.feedback { height: 1.5rem; margin-top: 1rem; font-weight: 500; color: var(--text-light); font-size: 0.95rem; }
+
+/* Form Config Layouts */
+.section-label { text-align: left; font-size: 0.85rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; margin-top: 1.25rem; }
+.segmented-control { display: flex; background: #E5E7EB; padding: 3px; border-radius: 10px; gap: 2px; margin-bottom: 1rem; }
+.segmented-control label { flex: 1; text-align: center; padding: 8px 0; font-size: 0.9rem; font-weight: 600; color: var(--text-light); cursor: pointer; border-radius: 8px; transition: all 0.15s ease; }
+.segmented-control input[type="radio"] { display: none; }
+.segmented-control label:has(input:checked) { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+.range-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; }
+.range-group { display: flex; flex-direction: column; gap: 4px; }
+.range-group label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+.range-inputs { display: flex; align-items: center; gap: 6px; }
+.range-inputs input { width: 100%; padding: 8px; border: 2px solid var(--border); border-radius: 8px; font-size: 0.95rem; text-align: center; font-weight: 600; }
+.range-inputs input:focus { border-color: var(--primary); outline: none; }
+.range-dash { color: var(--text-light); font-weight: bold; }
+
+.preset-container { display: flex; gap: 6px; margin-top: 0.5rem; flex-wrap: wrap; }
+.preset-badge { font-size: 0.75rem; font-weight: 600; background: #E5E7EB; color: var(--text-light); padding: 4px 8px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
+.preset-badge:hover { background: #D1D5DB; color: var(--text); }
+
+.stabs { display: flex; gap: 6px; margin-bottom: 1rem; overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
+.stabs::-webkit-scrollbar { display: none; }
+.stb { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--text-light); font-size: 13px; cursor: pointer; flex-shrink: 0; }
+.stb.a { background: var(--primary-light); border-color: var(--primary); color: #3C3489; font-weight: 500; }
+
+/* Dots & Timers */
+.prog { display: flex; gap: 4px; flex-wrap: wrap; margin-top: .75rem; justify-content: center; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--color-background-secondary); border: 1px solid var(--color-border-tertiary); }
+.dot.c { background: #1D9E75; border-color: #1D9E75; }
+.dot.w { background: #D85A30; border-color: #D85A30; }
+
+.fct-wrapper { display: flex; justify-content: center; margin-bottom: 0.25rem; }
+.fct { position: relative; width: 24px; height: 24px; border-radius: 50%; background: conic-gradient(var(--primary) 360deg,#e5e7eb 0deg); box-shadow: 0 0 0 1px rgba(0,0,0,.04); }
+.fct::before { content:""; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--color-background-primary); top: 3px; left: 3px; }
+
+/* Progress Table Styles */
+.tbl-w { width: 100%; overflow-x: auto; margin-bottom: 1rem; border-radius: 8px; border: 1px solid #e5e7eb; margin-top: 1rem; }
+.ptbl { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+.ptbl th { padding: 8px 10px; background: var(--color-background-secondary); border-bottom: 1px solid #e5e7eb; color: var(--text-light); font-weight: 500; }
+.ptbl td { padding: 7px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+.ptbl .g { color: #0F6E56; font-weight: 500; }
+.ptbl .b { color: #993C1D; }
+.ptbl .d { color: var(--text-light); text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="W">
+  <div class="app-title">Math Fluency Suite</div>
+  
+  <div class="tn">
+    <button class="tb a" id="tn-custom" onclick="switchMainTab('custom')">60s Custom Drill</button>
+    <button class="tb" id="tn-fixed" onclick="switchMainTab('fixed')">12×12 Speed Sprint</button>
+  </div>
+
+  <div id="sec-custom" class="sec a">
+    <div class="card">
+        <div id="custom-start-zone">
+            <h2>Custom Range Drill</h2>
+            <div class="subtitle">Tailored Countdown Practice</div>
+            
+            <div class="section-label">Operation</div>
+            <div class="segmented-control">
+                <label><input type="radio" name="customOpMode" value="multiplication" checked> Multiplication</label>
+                <label><input type="radio" name="customOpMode" value="division"> Division</label>
+                <label><input type="radio" name="customOpMode" value="mixed"> Mixed</label>
+            </div>
+
+            <div class="section-label">Factor / Number Ranges</div>
+            <div class="range-grid">
+                <div class="range-group">
+                    <label id="c-label-range1">Factor 1 Range</label>
+                    <div class="range-inputs">
+                        <input type="number" id="c-min1" value="2" min="1">
+                        <span class="range-dash">-</span>
+                        <input type="number" id="c-max1" value="12" min="1">
+                    </div>
+                </div>
+                <div class="range-group">
+                    <label id="c-label-range2">Factor 2 Range</label>
+                    <div class="range-inputs">
+                        <input type="number" id="c-min2" value="2" min="1">
+                        <span class="range-dash">-</span>
+                        <input type="number" id="c-max2" value="12" min="1">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-label">Quick Presets</div>
+            <div class="preset-container">
+                <span class="preset-badge" onclick="applyCustomPreset(2, 9, 2, 9)">Single Digits (2-9)</span>
+                <span class="preset-badge" onclick="applyCustomPreset(1, 12, 1, 12)">Classic Tables (1-12)</span>
+                <span class="preset-badge" onclick="applyCustomPreset(11, 19, 1, 9)">Teens Blend</span>
+                <span class="preset-badge" onclick="applyCustomPreset(10, 99, 2, 9)">Double × Single</span>
+            </div>
+
+            <button class="btn" style="margin-top: 1.5rem;" onclick="customEngine.start()">Start 60s Drill</button>
+        </div>
+
+        <div id="custom-game-zone" style="display:none;">
+            <div class="timer" id="c-timer-display">60s</div>
+            <div class="stats">
+                <span>Correct: <span id="c-stat-correct">0</span></span>
+                <span>Accuracy: <span id="c-stat-accuracy">0%</span></span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="c-progress-bar"></div>
+            </div>
+            
+            <div class="problem" id="c-problem-display">? × ?</div>
+            <input type="text" pattern="[0-9]*" inputmode="numeric" id="c-answer-input" autocomplete="off">
+            <div class="feedback" id="c-feedback-display">Type your answer!</div>
+        </div>
+    </div>
+  </div>
+
+  <div id="sec-fixed" class="sec">
+    <div style="display:flex; gap:6px; margin-bottom:1rem; background:#E5E7EB; padding:4px; border-radius:10px;">
+       <button id="stb-sprint" class="btn2 a" style="flex:1;" onclick="switchFixedSubTab('sprint')">Sprint Drill</button>
+       <button id="stb-prog" class="btn2" style="flex:1;" onclick="switchFixedSubTab('prog')">Progress History</button>
+    </div>
+
+    <div id="fixed-sub-sprint">
+      <div style="background:var(--color-background-secondary); border-radius:10px; padding:12px; margin-bottom:1rem; display:flex; flex-direction:column; gap:10px;">
+        <div>
+          <div style="font-size:11px; font-weight:600; color:var(--text-light); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.02em;">1. Sprint Sorting Mode:</div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn2 a" onclick="xSetMode('shuffle')" id="xm-shuffle" style="flex:1;">Random Shuffle</button>
+            <button class="btn2" onclick="xSetMode('family')" id="xm-family" style="flex:1;">Group by Product</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:600; color:var(--text-light); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.02em;">2. Select Time Limit Per Card:</div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn2" onclick="xSetTime(2000)" id="xt2">2s</button>
+            <button class="btn2 a" onclick="xSetTime(3000)" id="xt3">3s</button>
+            <button class="btn2" onclick="xSetTime(4000)" id="xt4">4s</button>
+            <button class="btn2" onclick="xSetTime(5000)" id="xt5">5s</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px; font-weight:600; color:var(--text-light); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.02em;">3. Select Factor Subsets:</div>
+          <div class="stabs" style="margin-bottom:0; padding-bottom:0;">
+            <button class="stb a" onclick="xToggleStage(1)" id="xs1">Factors 1 – 5</button>
+            <button class="stb" onclick="xToggleStage(2)" id="xs2">Factors 6 – 9</button>
+            <button class="stb" onclick="xToggleStage(3)" id="xs3">Factors 10 – 12</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+           <span class="fp" id="x-pt" style="margin:0;">0 of 0 clear</span>
+           <button class="btn2" id="x-pau-btn" style="display:none;" onclick="xTogglePause()">pause</button>
+        </div>
+        <div class="fpb"><div class="fpf" id="x-pf"></div></div>
+
+        <div class="st">
+          <div class="sc"><div class="sv" id="x-streak">0</div><div class="sl">streak</div></div>
+          <div class="sc"><div class="sv" id="x-ac">—</div><div class="sl">accuracy</div></div>
+          <div class="sc"><div class="sv" id="x-ct">0</div><div class="sl">answered</div></div>
+        </div>
+
+        <div class="qc">
+          <div class="fct-wrapper">
+             <div class="fct" id="x-tmr" style="visibility:hidden;"></div>
+          </div>
+          <div id="x-content-box" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+             <div class="mq" id="x-disp">Ready?</div>
+             <div class="ti-display empty" id="x-input-view" style="display:none;">type answer...</div>
+          </div>
+          <div><div class="fb" id="x-fb"></div></div>
+        </div>
+        
+        <div style="text-align:center; margin-top:1rem;">
+           <button class="btn" id="x-go" onclick="xStart()">start sprint</button>
+        </div>
+        <div class="prog" id="x-pr"></div>
+      </div>
+    </div>
+
+    <div id="fixed-sub-prog" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+        <span style="font-size:16px;font-weight:600;color:var(--text);">Session Log History</span>
+        <button class="btn2" onclick="clearAllHistory()">🗑 clear all</button>
+      </div>
+      <div class="tbl-w">
+        <table class="ptbl">
+          <thead>
+            <tr><th>Date</th><th>Type</th><th>Result</th><th>Details</th></tr>
+          </thead>
+          <tbody id="p-body">
+            <tr><td colspan="4" class="d">No sessions completed yet.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══ APPLICATION MAIN NAV CONTROLLERS ═══ */
+function switchMainTab(target) {
+    // If fixed sprint is active, pause it safely before transitioning away
+    if (target !== 'fixed' && X.on && !X.paused) {
+        xTogglePause();
+    }
+    document.getElementById('sec-custom').classList.toggle('a', target === 'custom');
+    document.getElementById('sec-fixed').classList.toggle('a', target === 'fixed');
+    document.getElementById('tn-custom').classList.toggle('a', target === 'custom');
+    document.getElementById('tn-fixed').classList.toggle('a', target === 'fixed');
+}
+
+function switchFixedSubTab(sub) {
+    document.getElementById('fixed-sub-sprint').style.display = (sub === 'sprint') ? 'block' : 'none';
+    document.getElementById('fixed-sub-prog').style.display = (sub === 'prog') ? 'block' : 'none';
+    document.getElementById('stb-sprint').classList.toggle('a', sub === 'sprint');
+    document.getElementById('stb-prog').classList.toggle('a', sub === 'prog');
+    if (sub === 'prog') renderProgTable();
+}
+
+/* ═══ ENGINE 1: 60-SECOND CUSTOM FIELD DRIL ENGINE ═══ */
+document.querySelectorAll('input[name="customOpMode"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const r1 = document.getElementById('c-label-range1');
+        const r2 = document.getElementById('c-label-range2');
+        if (e.target.value === 'division') {
+            r1.textContent = "Quotient Range"; r2.textContent = "Divisor Range";
+        } else {
+            r1.textContent = "Factor 1 Range"; r2.textContent = "Factor 2 Range";
+        }
+    });
+});
+
+function applyCustomPreset(min1, max1, min2, max2) {
+    document.getElementById('c-min1').value = min1; document.getElementById('c-max1').value = max1;
+    document.getElementById('c-min2').value = min2; document.getElementById('c-max2').value = max2;
+}
+
+const customEngine = {
+    score: 0, total: 0, timeLeft: 60, timerId: null, currentAnswer: 0, mode: 'multiplication',
+    config: { min1: 2, max1: 12, min2: 2, max2: 12 },
+
+    generateProblem: function() {
+        let f1 = Math.floor(Math.random() * (this.config.max1 - this.config.min1 + 1)) + this.config.min1;
+        let f2 = Math.floor(Math.random() * (this.config.max2 - this.config.min2 + 1)) + this.config.min2;
+        let currentOp = this.mode;
+        if (this.mode === 'mixed') currentOp = Math.random() < 0.5 ? 'multiplication' : 'division';
+
+        if (currentOp === 'multiplication') {
+            this.currentAnswer = f1 * f2;
+            document.getElementById('c-problem-display').textContent = `${f1} × ${f2}`;
+        } else {
+            let dividend = f1 * f2;
+            this.currentAnswer = f1;
+            document.getElementById('c-problem-display').textContent = `${dividend} ÷ ${f2}`;
+        }
+        document.getElementById('c-answer-input').value = '';
+    },
+
+    start: function() {
+        this.mode = document.querySelector('input[name="customOpMode"]:checked').value;
+        this.config.min1 = parseInt(document.getElementById('c-min1').value) || 1;
+        this.config.max1 = parseInt(document.getElementById('c-max1').value) || 12;
+        this.config.min2 = parseInt(document.getElementById('c-min2').value) || 1;
+        this.config.max2 = parseInt(document.getElementById('c-max2').value) || 12;
+
+        if (this.config.min1 > this.config.max1) [this.config.min1, this.config.max1] = [this.config.max1, this.config.min1];
+        if (this.config.min2 > this.config.max2) [this.config.min2, this.config.max2] = [this.config.max2, this.config.min2];
+
+        this.score = 0; this.total = 0; this.timeLeft = 60;
+        document.getElementById('c-stat-correct').textContent = '0';
+        document.getElementById('c-stat-accuracy').textContent = '0%';
+        document.getElementById('c-timer-display').textContent = '60s';
+        document.getElementById('c-progress-bar').style.width = '0%';
+        document.getElementById('c-feedback-display').textContent = 'Go!';
+        
+        document.getElementById('custom-start-zone').style.display = 'none';
+        document.getElementById('custom-game-zone').style.display = 'block';
+        
+        this.generateProblem();
+        document.getElementById('c-answer-input').focus();
+        
+        this.timerId = setInterval(() => {
+            this.timeLeft--;
+            document.getElementById('c-timer-display').textContent = this.timeLeft + 's';
+            let timePct = ((60 - this.timeLeft) / 60) * 100;
+            document.getElementById('c-progress-bar').style.width = timePct + '%';
+            if (this.timeLeft <= 0) this.end();
+        }, 1000);
+    },
+
+    end: function() {
+        clearInterval(this.timerId);
+        document.getElementById('custom-game-zone').style.display = 'none';
+        document.getElementById('custom-start-zone').style.display = 'block';
+        let accuracy = this.total > 0 ? Math.round((this.score / this.total) * 100) : 0;
+
+        let details = `${this.mode.toUpperCase()} | (${this.config.min1}-${this.config.max1})x(${this.config.min2}-${this.config.max2})`;
+        logSessionToDB({ cor: this.score, tot: this.total, acc: accuracy, stage: details, type: '60s Drill' });
+
+        document.getElementById('custom-start-zone').innerHTML = `
+            <h2 style="color: var(--primary);">Drill Complete! 🏁</h2>
+            <p style="margin: 1.25rem 0 0.5rem 0; font-size: 1.1rem;">You accurately answered <strong>${this.score}</strong> problems.</p>
+            <p style="margin: 0 0 1.5rem 0; color: var(--text-light);">Total Attempts: ${this.total} | Accuracy: ${accuracy}%</p>
+            <button class="btn" onclick="resetCustomDashboardHtml()">Run New Drill</button>
+        `;
+    }
+};
+
+function resetCustomDashboardHtml(){
+    window.location.reload();
+}
+
+// Interactive evaluations on Key Input fields for engine 1
+document.getElementById('c-answer-input').addEventListener('input', () => {
+    const raw = document.getElementById('c-answer-input').value;
+    const val = parseInt(raw);
+    if (!isNaN(val) && val === customEngine.currentAnswer) {
+        customEngine.score++; customEngine.total++;
+        document.getElementById('c-stat-correct').textContent = customEngine.score;
+        document.getElementById('c-stat-accuracy').textContent = Math.round((customEngine.score / customEngine.total) * 100) + '%';
+        document.getElementById('c-feedback-display').style.color = "var(--success)";
+        document.getElementById('c-feedback-display').textContent = "Correct!";
+        customEngine.generateProblem();
+    }
+});
+
+document.getElementById('c-answer-input').addEventListener('keyup', (e) => {
+    if (e.key === 'Enter' && document.getElementById('c-answer-input').value !== '') {
+        const val = parseInt(document.getElementById('c-answer-input').value);
+        if (val !== customEngine.currentAnswer) {
+            customEngine.total++;
+            document.getElementById('c-stat-accuracy').textContent = Math.round((customEngine.score / customEngine.total) * 100) + '%';
+            document.getElementById('c-feedback-display').style.color = "#D85A30";
+            document.getElementById('c-feedback-display').textContent = "Incorrect! Next one.";
+            customEngine.generateProblem();
+        }
+    }
+});
+
+
+/* ═══ ENGINE 2: FIXED 12x12 SPRINT SUITE (NATIVE INTERACTION) ═══ */
+let DB = JSON.parse(localStorage.getItem('msm_combined_db')) || { log: [] };
+function logSessionToDB(data) {
+    DB.log.unshift({ ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}), ...data });
+    localStorage.setItem('msm_combined_db', JSON.stringify(DB));
+}
+function clearAllHistory() {
+    if(!confirm('Clear all session logs?')) return;
+    DB = { log: [] }; localStorage.setItem('msm_combined_db', JSON.stringify(DB));
+    renderProgTable();
+}
+
+let X = { stages: [1], timeTarget: 3000, sortMode: 'shuffle', deck: [], initialCount: 0, currentCard: null, ansStr: "", ans: false, on: false, tot: 0, cor: 0, streak: 0, hist: [], paused: false, deadline: 0, rem: 3000, tid: null };
+
+function xBuildDeck() {
+  let list = [];
+  for (let i = 1; i <= 12; i++) {
+    for (let j = 1; j <= 12; j++) {
+      let iG = i <= 5 ? 1 : (i <= 9 ? 2 : 3);
+      let jG = j <= 5 ? 1 : (j <= 9 ? 2 : 3);
+      if (X.stages.includes(iG) && X.stages.includes(jG)) {
+        list.push({ f1: i, f2: j, a: i * j });
+      }
+    }
+  }
+  if (X.sortMode === 'family') {
+    let families = {};
+    list.forEach(card => {
+      if(!families[card.a]) families[card.a] = [];
+      families[card.a].push(card);
+    });
+    let sortedKeys = Object.keys(families).sort(() => Math.random() - 0.5);
+    let bundledList = [];
+    sortedKeys.forEach(key => { bundledList.push(...families[key].sort(() => Math.random() - 0.5)); });
+    return bundledList;
+  }
+  return list.sort(() => Math.random() - 0.5);
+}
+
+function xReady(){
+  xStopTimer(); X.on=false; X.paused=false; X.ansStr="";
+  document.getElementById('x-pau-btn').style.display='none';
+  document.getElementById('x-pau-btn').textContent='pause';
+  document.getElementById('x-tmr').style.visibility='hidden';
+  document.getElementById('x-streak').textContent='0';
+  document.getElementById('x-ac').textContent='—';
+  document.getElementById('x-ct').textContent='0';
+  document.getElementById('x-disp').textContent = 'Ready?';
+  
+  const iv = document.getElementById('x-input-view');
+  iv.style.display = 'none'; iv.textContent = 'type answer...'; iv.className = 'ti-display empty';
+  document.getElementById('x-fb').textContent='';
+  
+  const pm = document.getElementById('p-mark'); if(pm) pm.remove();
+
+  X.deck = xBuildDeck(); X.initialCount = X.deck.length;
+  
+  const goBtn = document.getElementById('x-go');
+  goBtn.style.display = 'inline-block';
+  if(X.initialCount === 0) {
+     goBtn.textContent = 'Select factor subset'; goBtn.disabled = true; goBtn.style.opacity = '0.5';
+  } else {
+     goBtn.textContent = 'start sprint'; goBtn.disabled = false; goBtn.style.opacity = '1';
+  }
+  updateFixedProgressUI();
+}
+
+function xStart(){
+  if(X.deck.length === 0) return;
+  X.tot=0; X.cor=0; X.streak=0; X.hist=[]; X.on=true; X.paused=false; X.initialCount = X.deck.length;
+  document.getElementById('x-pr').innerHTML='';
+  document.getElementById('x-go').style.display='none';
+  document.getElementById('x-pau-btn').style.display='inline-block';
+  document.getElementById('x-tmr').style.visibility='visible';
+  xNext();
+}
+
+function xNext(){
+  if(!X.on){ xReady(); return; }
+  if(X.deck.length===0){ xEnd(true); return; }
+  X.ans=false; X.ansStr=""; X.currentCard = X.deck[0];
+  
+  document.getElementById('x-disp').textContent = `${X.currentCard.f1} × ${X.currentCard.f2}`;
+  const iv = document.getElementById('x-input-view');
+  iv.style.display = 'block'; iv.textContent = 'type answer...'; iv.className = 'ti-display empty';
+  document.getElementById('x-fb').textContent='';
+  
+  xStartTimer();
+}
+
+// Global key monitoring interceptor mapped explicitly for fixed speed card iterations
+window.addEventListener('keyup', function(e) {
+  if(!X.on || X.ans || X.paused || document.getElementById('sec-fixed').className.indexOf('a') === -1) return;
+  const iv = document.getElementById('x-input-view');
+  
+  if(e.key === 'Backspace') {
+    X.ansStr = X.ansStr.slice(0, -1);
+    if(X.ansStr === "") { iv.textContent = "type answer..."; iv.className = 'ti-display empty'; } 
+    else { iv.textContent = X.ansStr; iv.className = 'ti-display'; }
+    return;
+  }
+  
+  if(/^\d$/.test(e.key)) {
+    if(X.ansStr.length >= 3) return;
+    X.ansStr += e.key; iv.textContent = X.ansStr; iv.className = 'ti-display';
+    
+    const targetAns = X.currentCard.a.toString();
+    if(X.ansStr === targetAns) { xEvaluateInput(true); } 
+    else if (X.ansStr.length >= targetAns.length) { xEvaluateInput(false); }
+  }
+});
+
+function xEvaluateInput(isCorrect) {
+  xStopTimer(); X.ans = true; X.tot++;
+  const fb = document.getElementById('x-fb');
+  
+  if(isCorrect) {
+    X.cor++; X.streak++; fb.textContent='✓'; fb.className='fb ok'; X.hist.push('c'); X.deck.shift();
+  } else {
+    X.streak = 0; fb.textContent=X.currentCard.a; fb.className='fb-large'; X.hist.push('w'); X.deck.push(X.deck.shift());
+  }
+  
+  updateFixedStatsUI();
+  document.getElementById('x-pr').innerHTML=X.hist.slice(-44).map(h=>`<div class="dot ${h}"></div>`).join('');
+  setTimeout(xNext, isCorrect ? 300 : 1000);
+}
+
+function xStartTimer(){ xStopTimer(); X.rem = X.timeTarget; X.deadline = Date.now() + X.timeTarget; xTick(); X.tid = setInterval(xTick, 40); }
+function xStopTimer(){ if(X.tid){clearInterval(X.tid); X.tid=null;} }
+
+function xTick(){
+  if(X.paused) return;
+  const l = Math.max(0, X.deadline - Date.now()); X.rem = l;
+  const el = document.getElementById('x-tmr');
+  const deg = Math.max(0, Math.min(360, (l / X.timeTarget) * 360));
+  el.style.background = `conic-gradient(var(--primary) ${deg}deg, #e5e7eb 0deg)`;
+  if(l <= 0 && X.on && !X.ans) { xTimeoutFail(); }
+}
+
+function xTimeoutFail(){
+  xStopTimer(); X.ans = true; X.tot++; X.streak = 0;
+  const fb = document.getElementById('x-fb');
+  fb.textContent = X.currentCard.a; fb.className = 'fb-large';
+  X.hist.push('w'); X.deck.push(X.deck.shift());
+  updateFixedStatsUI();
+  document.getElementById('x-pr').innerHTML=X.hist.slice(-44).map(h=>`<div class="dot ${h}"></div>`).join('');
+  setTimeout(xNext, 1000);
+}
+
+function xTogglePause(){
+  if(!X.on) return;
+  const iv = document.getElementById('x-input-view');
+  if(X.paused) {
+    X.paused = false; X.deadline = Date.now() + X.rem;
+    document.getElementById('x-pau-btn').textContent = 'pause';
+    document.getElementById('x-disp').style.display = 'block';
+    const pm = document.getElementById('p-mark'); if(pm) pm.remove();
+    if(X.ansStr === "") { iv.style.display = 'block'; iv.textContent = 'type answer...'; iv.className = 'ti-display empty'; } 
+    else { iv.style.display = 'block'; iv.textContent = X.ansStr; iv.className = 'ti-display'; }
+    xTick(); X.tid = setInterval(xTick, 40);
+  } else {
+    X.rem = Math.max(0, X.deadline - Date.now()); X.paused = true; xStopTimer();
+    document.getElementById('x-tmr').style.background = '#e5e7eb';
+    document.getElementById('x-pau-btn').textContent = 'resume';
+    document.getElementById('x-disp').style.display = 'none'; iv.style.display = 'none';
+    
+    let pDiv = document.createElement('div'); pDiv.id = "p-mark";
+    pDiv.innerHTML = '<div style="font-size:22px; font-weight:600; color:#6b7280; margin:2rem 0;">Paused</div>';
+    document.getElementById('x-content-box').appendChild(pDiv);
+  }
+}
+
+function xEnd(completed) {
+  X.on = false; xStopTimer();
+  document.getElementById('x-pau-btn').style.display='none';
+  document.getElementById('x-tmr').style.visibility='hidden';
+  document.getElementById('x-input-view').style.display='none';
+  
+  const acc = X.tot ? Math.round(X.cor / X.tot * 100) : 0;
+  let msg = `Session Logged: ${X.cor}/${X.tot} responses (${acc}%)`;
+  if(completed && acc === 100) msg = `🎯 Perfect Mastery Sprint Cleared!`;
+  
+  document.getElementById('x-disp').textContent = msg;
+  document.getElementById('x-go').style.display='inline-block'; document.getElementById('x-go').textContent='restart sprint';
+  
+  let details = `${X.sortMode.toUpperCase()} | Subsets:[${X.stages.join(',')}] | ${(X.timeTarget/1000)}s`;
+  logSessionToDB({ cor: X.cor, tot: X.tot, acc: acc, stage: details, type: '12x12 Sprint' });
+  updateFixedProgressUI();
+}
+
+function xSetMode(m) { if(X.on) return; X.sortMode = m; document.getElementById('xm-shuffle').classList.toggle('a', m === 'shuffle'); document.getElementById('xm-family').classList.toggle('a', m === 'family'); xReady(); }
+function xSetTime(ms) { if(X.on) return; X.timeTarget = ms; [2000, 3000, 4000, 5000].forEach(v => { document.getElementById('xt' + (v/1000)).classList.toggle('a', v === ms); }); }
+function xToggleStage(s) {
+  if(X.on) return;
+  if(X.stages.includes(s)) {
+    if(X.stages.length > 1) { X.stages = X.stages.filter(x => x !== s); document.getElementById('xs'+s).classList.remove('a'); }
+  } else { X.stages.push(s); document.getElementById('xs'+s).classList.add('a'); }
+  xReady();
+}
+
+function updateFixedStatsUI(){
+  const acc = X.tot ? Math.round(X.cor / X.tot * 100) : 0;
+  document.getElementById('x-streak').textContent = X.streak;
+  document.getElementById('x-ac').textContent = X.tot ? acc + '%' : '—';
+  document.getElementById('x-ct').textContent = X.tot;
+  updateFixedProgressUI();
+}
+
+function updateFixedProgressUI(){
+  const processed = X.initialCount - X.deck.length;
+  document.getElementById('x-pt').textContent = `${processed} of ${X.initialCount} clear`;
+  const pct = X.initialCount ? Math.round((processed / X.initialCount) * 100) : 0;
+  document.getElementById('x-pf').style.width = pct + '%';
+}
+
+function renderProgTable(){
+  const tb = document.getElementById('p-body');
+  if(!DB.log || DB.log.length===0){
+    tb.innerHTML = '<tr><td colspan="4" class="d">No sessions completed yet.</td></tr>'; return;
+  }
+  tb.innerHTML = DB.log.map(r => {
+     const ok = r.acc === 100 && r.cor >= r.tot;
+     return `<tr>
+       <td style="white-space:nowrap; font-size:12px; color:var(--text-light);">${r.ts}</td>
+       <td style="font-weight:500;">${r.type || 'Sprint'}</td>
+       <td><span class="${ok ? 'g' : 'b'}">${r.cor}/${r.tot} · ${r.acc}%</span></td>
+       <td style="font-size:12px; color:var(--text-light);">${r.stage}</td>
+     </tr>`;
+  }).join('');
+}
+
+/* INITIAL RUN SEEDING */
+xReady();
+</script>
+</body>
+</html>
