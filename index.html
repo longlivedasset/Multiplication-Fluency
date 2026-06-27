@@ -105,12 +105,23 @@ h2 { margin-top: 0; margin-bottom: 0.25rem; color: var(--text); font-size: 1.5re
 .problem { font-size: 3.5rem; font-weight: bold; margin: 1rem 0; color: var(--text); letter-spacing: -1px; }
 .qc { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: 12px; padding: 2rem 1rem; margin-bottom: 1rem; text-align: center; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem; position: relative; }
 .mq { font-size: 38px; font-weight: 600; letter-spacing: .02em; color: #1c1c1e; }
-.ti-display { font-size: 34px; font-weight: 700; color: var(--primary); min-height: 46px; margin-top: 2px; letter-spacing: 0.05em; }
-.ti-display.empty { color: #cbd5e1; font-weight: 400; font-size: 24px; }
 
-/* Inputs & Buttons */
-input[type="text"] { width: 160px; font-size: 2.2rem; text-align: center; border: 2px solid #D1D5DB; border-radius: 8px; padding: 5px; }
-input[type="text"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(83, 74, 183, 0.2); }
+/* Styled Sprint Input Box */
+.sprint-input {
+  width: 180px;
+  font-size: 2.2rem;
+  text-align: center;
+  border: 2px solid #D1D5DB;
+  border-radius: 8px;
+  padding: 5px;
+  font-weight: 700;
+  color: var(--primary);
+}
+.sprint-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(83, 74, 183, 0.2);
+}
 
 .btn { width: 100%; max-width: 240px; padding: 12px 24px; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
 .btn:hover { background: #3C3489; }
@@ -292,7 +303,7 @@ input[type="text"]:focus { outline: none; border-color: var(--primary); box-shad
           </div>
           <div id="x-content-box" style="width:100%; display:flex; flex-direction:column; align-items:center;">
              <div class="mq" id="x-disp">Ready?</div>
-             <div class="ti-display empty" id="x-input-view" style="display:none;">type answer...</div>
+             <input type="text" pattern="[0-9]*" inputmode="numeric" id="x-answer-input" class="sprint-input" placeholder="Answer" style="display:none; margin-top: 10px;" autocomplete="off">
           </div>
           <div><div class="fb" id="x-fb"></div></div>
         </div>
@@ -326,7 +337,6 @@ input[type="text"]:focus { outline: none; border-color: var(--primary); box-shad
 <script>
 /* ═══ APPLICATION MAIN NAV CONTROLLERS ═══ */
 function switchMainTab(target) {
-    // If fixed sprint is active, pause it safely before transitioning away
     if (target !== 'fixed' && X.on && !X.paused) {
         xTogglePause();
     }
@@ -344,7 +354,7 @@ function switchFixedSubTab(sub) {
     if (sub === 'prog') renderProgTable();
 }
 
-/* ═══ ENGINE 1: 60-SECOND CUSTOM FIELD DRIL ENGINE ═══ */
+/* ═══ ENGINE 1: 60-SECOND CUSTOM FIELD DRILL ENGINE ═══ */
 document.querySelectorAll('input[name="customOpMode"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
         const r1 = document.getElementById('c-label-range1');
@@ -437,7 +447,6 @@ function resetCustomDashboardHtml(){
     window.location.reload();
 }
 
-// Interactive evaluations on Key Input fields for engine 1
 document.getElementById('c-answer-input').addEventListener('input', () => {
     const raw = document.getElementById('c-answer-input').value;
     const val = parseInt(raw);
@@ -465,7 +474,7 @@ document.getElementById('c-answer-input').addEventListener('keyup', (e) => {
 });
 
 
-/* ═══ ENGINE 2: FIXED 12x12 SPRINT SUITE (NATIVE INTERACTION) ═══ */
+/* ═══ ENGINE 2: FIXED 12x12 SPRINT SUITE (MOBILE OPTIMIZED) ═══ */
 let DB = JSON.parse(localStorage.getItem('msm_combined_db')) || { log: [] };
 function logSessionToDB(data) {
     DB.log.unshift({ ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}), ...data });
@@ -477,7 +486,7 @@ function clearAllHistory() {
     renderProgTable();
 }
 
-let X = { stages: [1], timeTarget: 3000, sortMode: 'shuffle', deck: [], initialCount: 0, currentCard: null, ansStr: "", ans: false, on: false, tot: 0, cor: 0, streak: 0, hist: [], paused: false, deadline: 0, rem: 3000, tid: null };
+let X = { stages: [1], timeTarget: 3000, sortMode: 'shuffle', deck: [], initialCount: 0, currentCard: null, ans: false, on: false, tot: 0, cor: 0, streak: 0, hist: [], paused: false, deadline: 0, rem: 3000, tid: null };
 
 function xBuildDeck() {
   let list = [];
@@ -505,7 +514,7 @@ function xBuildDeck() {
 }
 
 function xReady(){
-  xStopTimer(); X.on=false; X.paused=false; X.ansStr="";
+  xStopTimer(); X.on=false; X.paused=false;
   document.getElementById('x-pau-btn').style.display='none';
   document.getElementById('x-pau-btn').textContent='pause';
   document.getElementById('x-tmr').style.visibility='hidden';
@@ -514,8 +523,9 @@ function xReady(){
   document.getElementById('x-ct').textContent='0';
   document.getElementById('x-disp').textContent = 'Ready?';
   
-  const iv = document.getElementById('x-input-view');
-  iv.style.display = 'none'; iv.textContent = 'type answer...'; iv.className = 'ti-display empty';
+  const inputEl = document.getElementById('x-answer-input');
+  inputEl.style.display = 'none';
+  inputEl.value = '';
   document.getElementById('x-fb').textContent='';
   
   const pm = document.getElementById('p-mark'); if(pm) pm.remove();
@@ -545,35 +555,31 @@ function xStart(){
 function xNext(){
   if(!X.on){ xReady(); return; }
   if(X.deck.length===0){ xEnd(true); return; }
-  X.ans=false; X.ansStr=""; X.currentCard = X.deck[0];
+  X.ans=false; X.currentCard = X.deck[0];
   
   document.getElementById('x-disp').textContent = `${X.currentCard.f1} × ${X.currentCard.f2}`;
-  const iv = document.getElementById('x-input-view');
-  iv.style.display = 'block'; iv.textContent = 'type answer...'; iv.className = 'ti-display empty';
+  
+  const inputEl = document.getElementById('x-answer-input');
+  inputEl.style.display = 'block';
+  inputEl.value = '';
+  inputEl.focus();
+  
   document.getElementById('x-fb').textContent='';
   
   xStartTimer();
 }
 
-// Global key monitoring interceptor mapped explicitly for fixed speed card iterations
-window.addEventListener('keyup', function(e) {
-  if(!X.on || X.ans || X.paused || document.getElementById('sec-fixed').className.indexOf('a') === -1) return;
-  const iv = document.getElementById('x-input-view');
+// Mobile Input Evaluation Listener
+document.getElementById('x-answer-input').addEventListener('input', function() {
+  if(!X.on || X.ans || X.paused) return;
   
-  if(e.key === 'Backspace') {
-    X.ansStr = X.ansStr.slice(0, -1);
-    if(X.ansStr === "") { iv.textContent = "type answer..."; iv.className = 'ti-display empty'; } 
-    else { iv.textContent = X.ansStr; iv.className = 'ti-display'; }
-    return;
-  }
+  const rawInput = this.value.trim();
+  const targetAns = X.currentCard.a.toString();
   
-  if(/^\d$/.test(e.key)) {
-    if(X.ansStr.length >= 3) return;
-    X.ansStr += e.key; iv.textContent = X.ansStr; iv.className = 'ti-display';
-    
-    const targetAns = X.currentCard.a.toString();
-    if(X.ansStr === targetAns) { xEvaluateInput(true); } 
-    else if (X.ansStr.length >= targetAns.length) { xEvaluateInput(false); }
+  if(rawInput === targetAns) { 
+    xEvaluateInput(true); 
+  } else if (rawInput.length >= targetAns.length) { 
+    xEvaluateInput(false); 
   }
 });
 
@@ -616,20 +622,21 @@ function xTimeoutFail(){
 
 function xTogglePause(){
   if(!X.on) return;
-  const iv = document.getElementById('x-input-view');
+  const inputEl = document.getElementById('x-answer-input');
   if(X.paused) {
     X.paused = false; X.deadline = Date.now() + X.rem;
     document.getElementById('x-pau-btn').textContent = 'pause';
     document.getElementById('x-disp').style.display = 'block';
+    inputEl.style.display = 'block';
+    inputEl.focus();
     const pm = document.getElementById('p-mark'); if(pm) pm.remove();
-    if(X.ansStr === "") { iv.style.display = 'block'; iv.textContent = 'type answer...'; iv.className = 'ti-display empty'; } 
-    else { iv.style.display = 'block'; iv.textContent = X.ansStr; iv.className = 'ti-display'; }
     xTick(); X.tid = setInterval(xTick, 40);
   } else {
     X.rem = Math.max(0, X.deadline - Date.now()); X.paused = true; xStopTimer();
     document.getElementById('x-tmr').style.background = '#e5e7eb';
     document.getElementById('x-pau-btn').textContent = 'resume';
-    document.getElementById('x-disp').style.display = 'none'; iv.style.display = 'none';
+    document.getElementById('x-disp').style.display = 'none'; 
+    inputEl.style.display = 'none';
     
     let pDiv = document.createElement('div'); pDiv.id = "p-mark";
     pDiv.innerHTML = '<div style="font-size:22px; font-weight:600; color:#6b7280; margin:2rem 0;">Paused</div>';
@@ -641,7 +648,7 @@ function xEnd(completed) {
   X.on = false; xStopTimer();
   document.getElementById('x-pau-btn').style.display='none';
   document.getElementById('x-tmr').style.visibility='hidden';
-  document.getElementById('x-input-view').style.display='none';
+  document.getElementById('x-answer-input').style.display='none';
   
   const acc = X.tot ? Math.round(X.cor / X.tot * 100) : 0;
   let msg = `Session Logged: ${X.cor}/${X.tot} responses (${acc}%)`;
