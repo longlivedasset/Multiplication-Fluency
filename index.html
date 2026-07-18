@@ -2,709 +2,837 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Math Sprint & Fluency Hub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+<title>Multiplication Fluency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --primary: #534AB7;
-  --primary-light: #EEEDFA;
-  --bg: #F9FAFB;
-  --text: #111827;
-  --text-light: #6B7280;
-  --success: #1D9E75;
-  --border: #E5E7EB;
-  --color-border-secondary: #d1d5db;
-  --color-border-tertiary: #e5e7eb;
-  --color-background-secondary: #f3f4f6;
-  --color-background-primary: #fff;
-}
+  :root{
+    --paper: #F5F1E6;
+    --paper-line: #E3DCC9;
+    --ink: #16213E;
+    --ink-soft: #4A5578;
+    --solid: #3F6C51;
+    --solid-bg: #DCE9DE;
+    --shaky: #C98A2C;
+    --shaky-bg: #F3E3C4;
+    --new-bg: #FFFFFF;
+    --wrong: #A85C32;
+    --wrong-bg: #F1DDD1;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color:var(--ink);
+    font-family:'Quicksand', sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding: 20px 14px 60px;
+  }
+  .app{width:100%; max-width:560px;}
+  header{text-align:center; margin-bottom:14px;}
+  header h1{
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:1.4rem;
+    letter-spacing:0.5px;
+    margin:0 0 4px;
+  }
+  header p{margin:0; color:var(--ink-soft); font-size:0.82rem;}
 
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  .card{
+    background:#fff;
+    border:1px solid var(--paper-line);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:14px;
+    box-shadow:0 2px 0 var(--paper-line);
+  }
+  .card-title{
+    font-family:'Space Mono', monospace;
+    font-size:0.68rem;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin:0 0 10px;
+  }
 
-body { 
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-  display: flex; 
-  flex-direction: column;
-  align-items: center; 
-  min-height: 100vh; 
-  background-color: var(--bg); 
-  padding: 20px;
-}
+  .range-grid{display:flex; gap:10px; margin-bottom:10px;}
+  .range-group{flex:1;}
+  .range-group label{font-size:0.72rem; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:4px;}
+  .range-inputs{display:flex; align-items:center; gap:5px;}
+  .range-inputs input{
+    width:100%; padding:7px; border:1.5px solid var(--paper-line);
+    border-radius:7px; font-size:0.85rem; text-align:center;
+    font-family:'Space Mono', monospace; font-weight:700; color:var(--ink);
+  }
+  .range-inputs input:focus{outline:none; border-color:var(--ink);}
+  .range-dash{color:var(--ink-soft); font-weight:bold; font-size:0.8rem;}
 
-.W {
-  padding: 1.5rem 1rem; 
-  max-width: 480px; 
-  width: 100%;
-  margin: 0 auto;
-}
+  .presets{display:flex; gap:6px; flex-wrap:wrap;}
+  .preset-badge{
+    font-size:0.7rem; font-weight:600; background:var(--paper);
+    color:var(--ink-soft); padding:5px 9px; border-radius:7px;
+    cursor:pointer; border:1px solid var(--paper-line);
+  }
+  .preset-badge:active{background:var(--paper-line);}
 
-.app-title { font-size: 24px; font-weight: 700; margin-bottom: 1rem; color: var(--text); text-align: center; }
+  .mode-tabs{display:flex; gap:5px; margin-bottom:14px; overflow-x:auto;}
+  .mode-tab{
+    flex-shrink:0; padding:8px 12px; border-radius:9px;
+    border:1px solid var(--paper-line); background:#fff;
+    color:var(--ink-soft); font-size:0.78rem; font-weight:600;
+    cursor:pointer; font-family:'Quicksand';
+  }
+  .mode-tab.a{background:var(--ink); color:#fff; border-color:var(--ink);}
 
-/* Main Navigation Tabs */
-.tn {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid var(--color-border-tertiary);
-  padding-bottom: 1rem;
-  justify-content: center;
-}
-.tb {
-  padding: 8px 20px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text-light);
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-.tb.a {
-  background: var(--color-background-primary);
-  border-color: var(--color-border-secondary);
-  color: var(--primary);
-  font-weight: 600;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-}
+  .seg{display:flex; background:var(--paper); border-radius:9px; padding:3px; gap:2px; margin-bottom:12px;}
+  .seg button{
+    flex:1; padding:7px 0; border:none; background:transparent;
+    font-size:0.78rem; font-weight:600; color:var(--ink-soft);
+    border-radius:7px; cursor:pointer; font-family:'Quicksand';
+  }
+  .seg button.a{background:#fff; color:var(--ink); box-shadow:0 1px 0 var(--paper-line);}
 
-.sec { display: none; }
-.sec.a { display: block; }
+  .stats-row{display:flex; justify-content:center; gap:8px; margin-bottom:14px; font-family:'Space Mono', monospace; font-size:0.68rem;}
+  .stat-pill{display:flex; align-items:center; gap:5px; background:#fff; border:1px solid var(--paper-line); border-radius:18px; padding:4px 9px;}
+  .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .dot.new{background:#fff; border:1.5px solid var(--ink-soft);}
+  .dot.shaky{background:var(--shaky);}
+  .dot.solid{background:var(--solid);}
 
-/* Card Panels */
-.card { 
-  background: white; 
-  padding: 2rem 1.5rem; 
-  border-radius: 16px; 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.04); 
-  text-align: center; 
-  width: 100%;
-  box-sizing: border-box; 
-}
+  table.grid{border-collapse:collapse; width:100%;}
+  table.grid td{position:relative; text-align:center; padding:0; border-radius:3px;}
+  table.grid th{font-family:'Space Mono', monospace; font-size:0.6rem; color:var(--ink-soft); font-weight:400; padding:2px;}
+  .cell{width:100%; aspect-ratio:1/1; border-radius:3px; border:1px solid var(--paper-line); background:var(--new-bg);}
+  .cell.shaky{background:var(--shaky-bg); border-color:var(--shaky);}
+  .cell.solid{background:var(--solid-bg); border-color:var(--solid);}
 
-h2 { margin-top: 0; margin-bottom: 0.25rem; color: var(--text); font-size: 1.5rem; font-weight: 700; }
-.subtitle { color: var(--text-light); font-size: 0.95rem; margin-bottom: 1.5rem; font-weight: 500; }
+  .needs-list{font-size:0.8rem; line-height:1.9;}
+  .needs-list .tag{
+    display:inline-block; font-family:'Space Mono', monospace; font-size:0.7rem;
+    background:var(--shaky-bg); color:var(--shaky); border:1px solid var(--shaky);
+    padding:2px 7px; border-radius:6px; margin:2px 4px 2px 0;
+  }
 
-/* Timers & Stats grids */
-.timer { font-size: 1.75rem; font-weight: bold; color: #D85A30; margin-bottom: 0.5rem; }
-.stats { display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.95rem; color: var(--text-light); }
-.st { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
-.sc { background: var(--color-background-secondary); border-radius: 8px; padding: .7rem .4rem; text-align: center; }
-.sv { font-size: 20px; font-weight: 600; color: var(--text); }
-.sl { font-size: 11px; color: var(--text-light); margin-top: 2px; text-transform: uppercase; font-weight: 500; }
+  button.btn{
+    width:100%; font-family:'Quicksand'; font-weight:600; font-size:0.95rem;
+    color:#fff; background:var(--ink); border:none; border-radius:10px;
+    padding:13px; cursor:pointer;
+  }
+  button.btn:disabled{background:#ccc; cursor:not-allowed;}
+  button.btn.drill{background:var(--shaky);}
 
-/* Progress bars */
-.progress-container { background: #E5E7EB; border-radius: 8px; height: 10px; width: 100%; margin-bottom: 1.5rem; overflow: hidden; position: relative; }
-.progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.1s ease; }
-.fp { font-size: 13px; color: var(--text-light); margin-bottom: .5rem; text-align: left; }
-.fpb { height: 6px; background: var(--color-background-secondary); border-radius: 3px; margin-bottom: 1rem; overflow: hidden; }
-.fpf { height: 100%; background: var(--primary); border-radius: 3px; transition: width .3s; width: 0%; }
+  .practice-card{background:#fff; border:1px solid var(--paper-line); border-radius:14px; padding:22px 18px; text-align:center;}
+  .timer-track{height:6px; width:100%; background:var(--paper-line); border-radius:3px; overflow:hidden; margin-bottom:18px;}
+  .timer-fill{height:100%; background:var(--ink); width:100%; transition:width 0.05s linear;}
+  .timer-fill.late{background:var(--shaky);}
+  .equation{font-family:'Space Mono', monospace; font-weight:700; font-size:2.3rem; margin-bottom:16px;}
+  input.answer{
+    width:120px; font-family:'Space Mono', monospace; font-size:1.5rem; text-align:center;
+    padding:8px; border:2px solid var(--ink); border-radius:8px; outline:none;
+  }
+  input.answer:focus{border-color:var(--solid);}
+  .submit-btn{
+    display:block; margin:14px auto 0; font-family:'Quicksand'; font-weight:600;
+    background:var(--ink); color:#fff; border:none; border-radius:10px;
+    padding:9px 20px; font-size:0.9rem; cursor:pointer;
+  }
+  .feedback{margin-top:14px; font-family:'Space Mono', monospace; font-size:0.82rem; font-weight:700; min-height:1.2em;}
+  .feedback.correct{color:var(--solid);}
+  .feedback.wrong{color:var(--wrong);}
+  .feedback.slow{color:var(--shaky);}
 
-/* Problem Areas */
-.problem { font-size: 3.5rem; font-weight: bold; margin: 1rem 0; color: var(--text); letter-spacing: -1px; }
-.qc { background: var(--color-background-primary); border: 1px solid var(--color-border-tertiary); border-radius: 12px; padding: 2rem 1rem; margin-bottom: 1rem; text-align: center; min-height: 220px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .6rem; position: relative; }
-.mq { font-size: 38px; font-weight: 600; letter-spacing: .02em; color: #1c1c1e; }
+  .progress-label{font-size:0.8rem; color:var(--ink-soft); margin-bottom:2px; text-align:center;}
+  .back-link{display:block; margin-top:14px; font-family:'Space Mono', monospace; font-size:0.72rem; color:var(--ink-soft); text-align:center; cursor:pointer;}
 
-/* Styled Sprint Input Box */
-.sprint-input {
-  width: 180px;
-  font-size: 2.2rem;
-  text-align: center;
-  border: 2px solid #D1D5DB;
-  border-radius: 8px;
-  padding: 5px;
-  font-weight: 700;
-  color: var(--primary);
-}
-.sprint-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(83, 74, 183, 0.2);
-}
+  .sixty-timer{font-family:'Space Mono', monospace; font-size:1.6rem; font-weight:700; text-align:center; color:var(--shaky); margin-bottom:8px;}
+  .sixty-stats{display:flex; justify-content:space-around; font-size:0.78rem; color:var(--ink-soft); margin-bottom:12px;}
+  .sixty-problem{font-family:'Space Mono', monospace; font-weight:700; font-size:2.4rem; text-align:center; margin-bottom:14px;}
+  .sixty-fb{text-align:center; font-size:0.8rem; min-height:20px; color:var(--ink-soft); margin-top:8px;}
 
-.btn { width: 100%; max-width: 240px; padding: 12px 24px; border-radius: 10px; border: none; background: var(--primary); color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-.btn:hover { background: #3C3489; }
-.btn:active { transform: scale(.98); }
-
-.btn2 { padding: 6px 14px; border-radius: 8px; border: 1px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--text-light); font-size: 13px; cursor: pointer; font-weight: 500; }
-.btn2.a { background: var(--primary-light) !important; border-color: var(--primary) !important; color: #3C3489 !important; font-weight: 600; }
-
-.fb { font-size: 15px; font-weight: 500; min-height: 22px; }
-.fb.ok { color: #0F6E56; }
-.fb-large { font-size: 28px; font-weight: 700; color: #993C1D; min-height: 36px; margin-top: 4px; }
-.feedback { height: 1.5rem; margin-top: 1rem; font-weight: 500; color: var(--text-light); font-size: 0.95rem; }
-
-/* Form Config Layouts */
-.section-label { text-align: left; font-size: 0.85rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; margin-top: 1.25rem; }
-.segmented-control { display: flex; background: #E5E7EB; padding: 3px; border-radius: 10px; gap: 2px; margin-bottom: 1rem; }
-.segmented-control label { flex: 1; text-align: center; padding: 8px 0; font-size: 0.9rem; font-weight: 600; color: var(--text-light); cursor: pointer; border-radius: 8px; transition: all 0.15s ease; }
-.segmented-control input[type="radio"] { display: none; }
-.segmented-control label:has(input:checked) { background: white; color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-
-.range-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; }
-.range-group { display: flex; flex-direction: column; gap: 4px; }
-.range-group label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-.range-inputs { display: flex; align-items: center; gap: 6px; }
-.range-inputs input { width: 100%; padding: 8px; border: 2px solid var(--border); border-radius: 8px; font-size: 0.95rem; text-align: center; font-weight: 600; }
-.range-inputs input:focus { border-color: var(--primary); outline: none; }
-.range-dash { color: var(--text-light); font-weight: bold; }
-
-.preset-container { display: flex; gap: 6px; margin-top: 0.5rem; flex-wrap: wrap; }
-.preset-badge { font-size: 0.75rem; font-weight: 600; background: #E5E7EB; color: var(--text-light); padding: 4px 8px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; }
-.preset-badge:hover { background: #D1D5DB; color: var(--text); }
-
-.stabs { display: flex; gap: 6px; margin-bottom: 1rem; overflow-x: auto; white-space: nowrap; padding-bottom: 4px; }
-.stabs::-webkit-scrollbar { display: none; }
-.stb { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--text-light); font-size: 13px; cursor: pointer; flex-shrink: 0; }
-.stb.a { background: var(--primary-light); border-color: var(--primary); color: #3C3489; font-weight: 500; }
-
-/* Dots & Timers */
-.prog { display: flex; gap: 4px; flex-wrap: wrap; margin-top: .75rem; justify-content: center; }
-.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--color-background-secondary); border: 1px solid var(--color-border-tertiary); }
-.dot.c { background: #1D9E75; border-color: #1D9E75; }
-.dot.w { background: #D85A30; border-color: #D85A30; }
-
-.fct-wrapper { display: flex; justify-content: center; margin-bottom: 0.25rem; }
-.fct { position: relative; width: 24px; height: 24px; border-radius: 50%; background: conic-gradient(var(--primary) 360deg,#e5e7eb 0deg); box-shadow: 0 0 0 1px rgba(0,0,0,.04); }
-.fct::before { content:""; position: absolute; width: 18px; height: 18px; border-radius: 50%; background: var(--color-background-primary); top: 3px; left: 3px; }
-
-/* Progress Table Styles */
-.tbl-w { width: 100%; overflow-x: auto; margin-bottom: 1rem; border-radius: 8px; border: 1px solid #e5e7eb; margin-top: 1rem; }
-.ptbl { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
-.ptbl th { padding: 8px 10px; background: var(--color-background-secondary); border-bottom: 1px solid #e5e7eb; color: var(--text-light); font-weight: 500; }
-.ptbl td { padding: 7px 10px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
-.ptbl .g { color: #0F6E56; font-weight: 500; }
-.ptbl .b { color: #993C1D; }
-.ptbl .d { color: var(--text-light); text-align: center; }
+  .tbl-w{width:100%; overflow-x:auto;}
+  table.log{width:100%; border-collapse:collapse; font-size:0.72rem;}
+  table.log th{text-align:left; padding:6px 8px; background:var(--paper); color:var(--ink-soft); font-weight:600;}
+  table.log td{padding:6px 8px; border-bottom:1px solid var(--paper-line); color:var(--ink-soft);}
+  .loading{text-align:center; color:var(--ink-soft); padding:40px 0; font-family:'Space Mono', monospace; font-size:0.8rem;}
+  .hint{font-size:0.72rem; color:var(--ink-soft); margin-bottom:10px;}
 </style>
 </head>
 <body>
-
-<div class="W">
-  <div class="app-title">Math Fluency Suite</div>
-  
-  <div class="tn">
-    <button class="tb a" id="tn-custom" onclick="switchMainTab('custom')">60s Custom Drill</button>
-    <button class="tb" id="tn-fixed" onclick="switchMainTab('fixed')">12×12 Speed Sprint</button>
-  </div>
-
-  <div id="sec-custom" class="sec a">
-    <div class="card">
-        <div id="custom-start-zone">
-            <h2>Custom Range Drill</h2>
-            <div class="subtitle">Tailored Countdown Practice</div>
-            
-            <div class="section-label">Operation</div>
-            <div class="segmented-control">
-                <label><input type="radio" name="customOpMode" value="multiplication" checked> Multiplication</label>
-                <label><input type="radio" name="customOpMode" value="division"> Division</label>
-                <label><input type="radio" name="customOpMode" value="mixed"> Mixed</label>
-            </div>
-
-            <div class="section-label">Factor / Number Ranges</div>
-            <div class="range-grid">
-                <div class="range-group">
-                    <label id="c-label-range1">Factor 1 Range</label>
-                    <div class="range-inputs">
-                        <input type="number" id="c-min1" value="2" min="1">
-                        <span class="range-dash">-</span>
-                        <input type="number" id="c-max1" value="12" min="1">
-                    </div>
-                </div>
-                <div class="range-group">
-                    <label id="c-label-range2">Factor 2 Range</label>
-                    <div class="range-inputs">
-                        <input type="number" id="c-min2" value="2" min="1">
-                        <span class="range-dash">-</span>
-                        <input type="number" id="c-max2" value="12" min="1">
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-label">Quick Presets</div>
-            <div class="preset-container">
-                <span class="preset-badge" onclick="applyCustomPreset(2, 9, 2, 9)">Single Digits (2-9)</span>
-                <span class="preset-badge" onclick="applyCustomPreset(1, 12, 1, 12)">Classic Tables (1-12)</span>
-                <span class="preset-badge" onclick="applyCustomPreset(11, 19, 1, 9)">Teens Blend</span>
-                <span class="preset-badge" onclick="applyCustomPreset(10, 99, 2, 9)">Double × Single</span>
-            </div>
-
-            <button class="btn" style="margin-top: 1.5rem;" onclick="customEngine.start()">Start 60s Drill</button>
-        </div>
-
-        <div id="custom-game-zone" style="display:none;">
-            <div class="timer" id="c-timer-display">60s</div>
-            <div class="stats">
-                <span>Correct: <span id="c-stat-correct">0</span></span>
-                <span>Accuracy: <span id="c-stat-accuracy">0%</span></span>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar" id="c-progress-bar"></div>
-            </div>
-            
-            <div class="problem" id="c-problem-display">? × ?</div>
-            <input type="text" pattern="[0-9]*" inputmode="numeric" id="c-answer-input" autocomplete="off">
-            <div class="feedback" id="c-feedback-display">Type your answer!</div>
-        </div>
-    </div>
-  </div>
-
-  <div id="sec-fixed" class="sec">
-    <div style="display:flex; gap:6px; margin-bottom:1rem; background:#E5E7EB; padding:4px; border-radius:10px;">
-       <button id="stb-sprint" class="btn2 a" style="flex:1;" onclick="switchFixedSubTab('sprint')">Sprint Drill</button>
-       <button id="stb-prog" class="btn2" style="flex:1;" onclick="switchFixedSubTab('prog')">Progress History</button>
-    </div>
-
-    <div id="fixed-sub-sprint">
-      <div style="background:var(--color-background-secondary); border-radius:10px; padding:12px; margin-bottom:1rem; display:flex; flex-direction:column; gap:10px;">
-        <div>
-          <div style="font-size:11px; font-weight:600; color:var(--text-light); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.02em;">1. Sprint Sorting Mode:</div>
-          <div style="display:flex; gap:6px;">
-            <button class="btn2 a" onclick="xSetMode('shuffle')" id="xm-shuffle" style="flex:1;">Random Shuffle</button>
-            <button class="btn2" onclick="xSetMode('family')" id="xm-family" style="flex:1;">Group by Product</button>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px; font-weight:600; color:var(--text-light); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.02em;">2. Select Time Limit Per Card:</div>
-          <div style="display:flex; gap:6px;">
-            <button class="btn2" onclick="xSetTime(2000)" id="xt2">2s</button>
-            <button class="btn2 a" onclick="xSetTime(3000)" id="xt3">3s</button>
-            <button class="btn2" onclick="xSetTime(4000)" id="xt4">4s</button>
-            <button class="btn2" onclick="xSetTime(5000)" id="xt5">5s</button>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:11px; font-weight:600; color:var(--text-light); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.02em;">3. Select Factor Subsets:</div>
-          <div class="stabs" style="margin-bottom:0; padding-bottom:0;">
-            <button class="stb a" onclick="xToggleStage(1)" id="xs1">Factors 1 – 5</button>
-            <button class="stb" onclick="xToggleStage(2)" id="xs2">Factors 6 – 9</button>
-            <button class="stb" onclick="xToggleStage(3)" id="xs3">Factors 10 – 12</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
-           <span class="fp" id="x-pt" style="margin:0;">0 of 0 clear</span>
-           <button class="btn2" id="x-pau-btn" style="display:none;" onclick="xTogglePause()">pause</button>
-        </div>
-        <div class="fpb"><div class="fpf" id="x-pf"></div></div>
-
-        <div class="st">
-          <div class="sc"><div class="sv" id="x-streak">0</div><div class="sl">streak</div></div>
-          <div class="sc"><div class="sv" id="x-ac">—</div><div class="sl">accuracy</div></div>
-          <div class="sc"><div class="sv" id="x-ct">0</div><div class="sl">answered</div></div>
-        </div>
-
-        <div class="qc">
-          <div class="fct-wrapper">
-             <div class="fct" id="x-tmr" style="visibility:hidden;"></div>
-          </div>
-          <div id="x-content-box" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-             <div class="mq" id="x-disp">Ready?</div>
-             <input type="text" pattern="[0-9]*" inputmode="numeric" id="x-answer-input" class="sprint-input" placeholder="Answer" style="display:none; margin-top: 10px;" autocomplete="off">
-          </div>
-          <div><div class="fb" id="x-fb"></div></div>
-        </div>
-        
-        <div style="text-align:center; margin-top:1rem;">
-           <button class="btn" id="x-go" onclick="xStart()">start sprint</button>
-        </div>
-        <div class="prog" id="x-pr"></div>
-      </div>
-    </div>
-
-    <div id="fixed-sub-prog" style="display:none;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
-        <span style="font-size:16px;font-weight:600;color:var(--text);">Session Log History</span>
-        <button class="btn2" onclick="clearAllHistory()">🗑 clear all</button>
-      </div>
-      <div class="tbl-w">
-        <table class="ptbl">
-          <thead>
-            <tr><th>Date</th><th>Type</th><th>Result</th><th>Details</th></tr>
-          </thead>
-          <tbody id="p-body">
-            <tr><td colspan="4" class="d">No sessions completed yet.</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
+<div class="app" id="app"><div class="loading">loading…</div></div>
 
 <script>
-/* ═══ APPLICATION MAIN NAV CONTROLLERS ═══ */
-function switchMainTab(target) {
-    if (target !== 'fixed' && X.on && !X.paused) {
-        xTogglePause();
+/* ═══════════ STATE ═══════════ */
+const STORAGE_KEY = 'mult-fluency-data-v1';
+const FAST_MS = 2000;
+const TIMEOUT_MS = 3000;
+const SIXTY_FLAG_MS = 3000;
+const STACK20_SIZE = 20;
+const REVIEW_DAYS = 3;
+
+let RANGE = {min1:2, max1:9, min2:2, max2:9};
+let factsDB = {};
+let sessionLog = [];
+let modeTab = '60sec'; // 60sec | stack20 | stackAll | progress
+
+let stackEngineActive = false;
+let secEngineActive = false;
+
+/* ═══ persistence ═══ */
+async function loadData(){
+  try{
+    const res = await window.storage.get(STORAGE_KEY, false);
+    if(res && res.value){
+      const parsed = JSON.parse(res.value);
+      factsDB = parsed.facts || {};
+      sessionLog = parsed.log || [];
+      if(parsed.range) RANGE = parsed.range;
     }
-    document.getElementById('sec-custom').classList.toggle('a', target === 'custom');
-    document.getElementById('sec-fixed').classList.toggle('a', target === 'fixed');
-    document.getElementById('tn-custom').classList.toggle('a', target === 'custom');
-    document.getElementById('tn-fixed').classList.toggle('a', target === 'fixed');
+  } catch(e){ /* nothing saved yet */ }
+  render();
+}
+async function saveData(){
+  try{
+    await window.storage.set(STORAGE_KEY, JSON.stringify({facts:factsDB, log:sessionLog, range:RANGE}), false);
+  } catch(e){ console.error('save failed', e); }
+}
+async function clearAllData(){
+  if(!window.confirm('Clear all progress and history? This cannot be undone.')) return;
+  factsDB = {}; sessionLog = [];
+  await saveData();
+  render();
 }
 
-function switchFixedSubTab(sub) {
-    document.getElementById('fixed-sub-sprint').style.display = (sub === 'sprint') ? 'block' : 'none';
-    document.getElementById('fixed-sub-prog').style.display = (sub === 'prog') ? 'block' : 'none';
-    document.getElementById('stb-sprint').classList.toggle('a', sub === 'sprint');
-    document.getElementById('stb-prog').classList.toggle('a', sub === 'prog');
-    if (sub === 'prog') renderProgTable();
+/* ═══ fact records ═══ */
+function factKey(f1,f2){ return f1+'x'+f2; }
+function getFact(f1,f2){
+  const k = factKey(f1,f2);
+  if(!factsDB[k]) factsDB[k] = {streak:0, attempts:0, wrong:0, last:null};
+  return factsDB[k];
 }
-
-/* ═══ ENGINE 1: 60-SECOND CUSTOM FIELD DRILL ENGINE ═══ */
-document.querySelectorAll('input[name="customOpMode"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        const r1 = document.getElementById('c-label-range1');
-        const r2 = document.getElementById('c-label-range2');
-        if (e.target.value === 'division') {
-            r1.textContent = "Quotient Range"; r2.textContent = "Divisor Range";
-        } else {
-            r1.textContent = "Factor 1 Range"; r2.textContent = "Factor 2 Range";
-        }
-    });
-});
-
-function applyCustomPreset(min1, max1, min2, max2) {
-    document.getElementById('c-min1').value = min1; document.getElementById('c-max1').value = max1;
-    document.getElementById('c-min2').value = min2; document.getElementById('c-max2').value = max2;
+function statusOf(rec){
+  if(rec.streak>=3) return 'solid';
+  if(rec.attempts>0) return 'shaky';
+  return 'new';
 }
+function daysSince(dateStr){
+  if(!dateStr) return Infinity;
+  return Math.floor((Date.now()-new Date(dateStr).getTime())/86400000);
+}
+function needsReview(rec){
+  return rec.streak>=3 && daysSince(rec.last)>=REVIEW_DAYS;
+}
+function nowISO(){ return new Date().toISOString(); }
 
-const customEngine = {
-    score: 0, total: 0, timeLeft: 60, timerId: null, currentAnswer: 0, mode: 'multiplication',
-    config: { min1: 2, max1: 12, min2: 2, max2: 12 },
-
-    generateProblem: function() {
-        let f1 = Math.floor(Math.random() * (this.config.max1 - this.config.min1 + 1)) + this.config.min1;
-        let f2 = Math.floor(Math.random() * (this.config.max2 - this.config.min2 + 1)) + this.config.min2;
-        let currentOp = this.mode;
-        if (this.mode === 'mixed') currentOp = Math.random() < 0.5 ? 'multiplication' : 'division';
-
-        if (currentOp === 'multiplication') {
-            this.currentAnswer = f1 * f2;
-            document.getElementById('c-problem-display').textContent = `${f1} × ${f2}`;
-        } else {
-            let dividend = f1 * f2;
-            this.currentAnswer = f1;
-            document.getElementById('c-problem-display').textContent = `${dividend} ÷ ${f2}`;
-        }
-        document.getElementById('c-answer-input').value = '';
-    },
-
-    start: function() {
-        this.mode = document.querySelector('input[name="customOpMode"]:checked').value;
-        this.config.min1 = parseInt(document.getElementById('c-min1').value) || 1;
-        this.config.max1 = parseInt(document.getElementById('c-max1').value) || 12;
-        this.config.min2 = parseInt(document.getElementById('c-min2').value) || 1;
-        this.config.max2 = parseInt(document.getElementById('c-max2').value) || 12;
-
-        if (this.config.min1 > this.config.max1) [this.config.min1, this.config.max1] = [this.config.max1, this.config.min1];
-        if (this.config.min2 > this.config.max2) [this.config.min2, this.config.max2] = [this.config.max2, this.config.min2];
-
-        this.score = 0; this.total = 0; this.timeLeft = 60;
-        document.getElementById('c-stat-correct').textContent = '0';
-        document.getElementById('c-stat-accuracy').textContent = '0%';
-        document.getElementById('c-timer-display').textContent = '60s';
-        document.getElementById('c-progress-bar').style.width = '0%';
-        document.getElementById('c-feedback-display').textContent = 'Go!';
-        
-        document.getElementById('custom-start-zone').style.display = 'none';
-        document.getElementById('custom-game-zone').style.display = 'block';
-        
-        this.generateProblem();
-        document.getElementById('c-answer-input').focus();
-        
-        this.timerId = setInterval(() => {
-            this.timeLeft--;
-            document.getElementById('c-timer-display').textContent = this.timeLeft + 's';
-            let timePct = ((60 - this.timeLeft) / 60) * 100;
-            document.getElementById('c-progress-bar').style.width = timePct + '%';
-            if (this.timeLeft <= 0) this.end();
-        }, 1000);
-    },
-
-    end: function() {
-        clearInterval(this.timerId);
-        document.getElementById('custom-game-zone').style.display = 'none';
-        document.getElementById('custom-start-zone').style.display = 'block';
-        let accuracy = this.total > 0 ? Math.round((this.score / this.total) * 100) : 0;
-
-        let details = `${this.mode.toUpperCase()} | (${this.config.min1}-${this.config.max1})x(${this.config.min2}-${this.config.max2})`;
-        logSessionToDB({ cor: this.score, tot: this.total, acc: accuracy, stage: details, type: '60s Drill' });
-
-        document.getElementById('custom-start-zone').innerHTML = `
-            <h2 style="color: var(--primary);">Drill Complete! 🏁</h2>
-            <p style="margin: 1.25rem 0 0.5rem 0; font-size: 1.1rem;">You accurately answered <strong>${this.score}</strong> problems.</p>
-            <p style="margin: 0 0 1.5rem 0; color: var(--text-light);">Total Attempts: ${this.total} | Accuracy: ${accuracy}%</p>
-            <button class="btn" onclick="resetCustomDashboardHtml()">Run New Drill</button>
-        `;
+function allFactsInRange(){
+  const list=[];
+  for(let i=RANGE.min1;i<=RANGE.max1;i++){
+    for(let j=RANGE.min2;j<=RANGE.max2;j++){
+      list.push({f1:i, f2:j, rec:getFact(i,j)});
     }
+  }
+  return list;
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function rangeCounts(){
+  const all = allFactsInRange();
+  let n=0,s=0,solid=0;
+  all.forEach(p=>{
+    const st = statusOf(p.rec);
+    if(st==='new') n++; else if(st==='shaky') s++; else solid++;
+  });
+  return {n,s,solid,total:all.length};
+}
+
+/* ═══ RANGE CONFIG ═══ */
+function applyPreset(min1,max1,min2,max2){
+  if(stackEngineActive || secEngineActive) return;
+  RANGE = {min1,max1,min2,max2};
+  saveData();
+  render();
+}
+function updateRangeField(field, val){
+  if(stackEngineActive || secEngineActive) return;
+  const n = parseInt(val,10);
+  if(isNaN(n)) return;
+  RANGE[field] = n;
+  if(RANGE.min1 > RANGE.max1) [RANGE.min1, RANGE.max1] = [RANGE.max1, RANGE.min1];
+  if(RANGE.min2 > RANGE.max2) [RANGE.min2, RANGE.max2] = [RANGE.max2, RANGE.min2];
+  saveData();
+  render();
+}
+
+/* ═══════════ STACK ENGINE (20-stack / whole-stack) ═══════════ */
+let stackKind = '20'; // '20' | 'all'
+let deck = [];
+let deckSeen = {};
+let totalToClear = 0;
+let clearedCount = 0;
+let currentDrawFirstTry = false;
+let currentCard = null;
+let startTime = null;
+let timerHandle = null;
+let resolved = false;
+let wrongFlashTimer = null;
+let sessionPromotions = [];
+let sessionAttempted = 0;
+
+function weightOf(rec){
+  const st = statusOf(rec);
+  if(st==='solid') return 1;
+  if(st==='new') return 6 + rec.wrong*3;
+  return 4 + rec.wrong*3;
+}
+function buildStack20Deck(){
+  const all = allFactsInRange();
+  const unmastered = all.filter(p=>statusOf(p.rec)!=='solid');
+  const review = all.filter(p=>statusOf(p.rec)==='solid' && needsReview(p.rec));
+  let pool = weightedSample(unmastered, STACK20_SIZE);
+  if(pool.length < STACK20_SIZE){
+    pool = pool.concat(shuffle(review).slice(0, STACK20_SIZE-pool.length));
+  }
+  if(pool.length === 0){
+    pool = shuffle(all).slice(0, STACK20_SIZE);
+  }
+  return pool;
+}
+function weightedSample(list, n){
+  const remaining = list.slice();
+  const out = [];
+  for(let i=0;i<n && remaining.length>0;i++){
+    const total = remaining.reduce((s,p)=>s+weightOf(p.rec),0);
+    let r = Math.random()*total;
+    let idx=0;
+    for(;idx<remaining.length;idx++){
+      r -= weightOf(remaining[idx].rec);
+      if(r<=0) break;
+    }
+    idx = Math.min(idx, remaining.length-1);
+    out.push(remaining[idx]);
+    remaining.splice(idx,1);
+  }
+  return out;
+}
+function buildStackAllDeck(){
+  return shuffle(allFactsInRange());
+}
+
+function startStack(kind){
+  stackKind = kind;
+  stackEngineActive = true;
+  deck = kind === '20' ? buildStack20Deck() : buildStackAllDeck();
+  deckSeen = {};
+  totalToClear = deck.length;
+  clearedCount = 0;
+  sessionPromotions = [];
+  sessionAttempted = 0;
+  currentCard = null;
+  modeTab = 'stack-play';
+  render();
+  nextCard();
+}
+
+function nextCard(){
+  resolved = false;
+  if(deck.length === 0){
+    finishStackSession();
+    return;
+  }
+  currentCard = deck.shift();
+  const key = factKey(currentCard.f1, currentCard.f2);
+  currentDrawFirstTry = !deckSeen[key];
+  deckSeen[key] = true;
+  startTime = Date.now();
+  updateQuestionUI();
+  startTimerBar();
+}
+
+function startTimerBar(){
+  clearInterval(timerHandle);
+  timerHandle = setInterval(()=>{
+    const elapsed = Date.now() - startTime;
+    const f = document.getElementById('timer-fill');
+    if(f){
+      const pct = Math.max(0, 100 - (elapsed/TIMEOUT_MS)*100);
+      f.style.width = pct + '%';
+      f.classList.toggle('late', elapsed > FAST_MS);
+    }
+    if(elapsed >= TIMEOUT_MS){
+      submitAnswer(true);
+    }
+  }, 50);
+}
+
+function attemptSubmit(){
+  if(resolved) return;
+  const input = document.getElementById('answer-input');
+  if(!input) return;
+  const val = parseInt(input.value, 10);
+  if(isNaN(val)) return;
+  const product = currentCard.f1 * currentCard.f2;
+  const correct = val === product;
+  if(!correct){
+    markWrongAttempt();
+    return;
+  }
+  submitAnswer(false);
+}
+
+function markWrongAttempt(){
+  const input = document.getElementById('answer-input');
+  const fb = document.getElementById('feedback');
+  if(fb){ fb.className='feedback wrong'; fb.textContent='Try again'; }
+  if(input){ input.value=''; }
+  clearTimeout(wrongFlashTimer);
+  wrongFlashTimer = setTimeout(()=>{
+    if(!resolved){
+      const fb2 = document.getElementById('feedback');
+      if(fb2){ fb2.className='feedback'; fb2.textContent=''; }
+    }
+  }, 500);
+}
+
+function submitAnswer(isTimeout){
+  if(resolved) return;
+  resolved = true;
+  clearInterval(timerHandle);
+
+  const input = document.getElementById('answer-input');
+  const elapsed = Date.now() - startTime;
+  const val = input ? parseInt(input.value, 10) : NaN;
+  const product = currentCard.f1 * currentCard.f2;
+  const correct = !isTimeout && val === product;
+  const rec = currentCard.rec;
+  const wasNotSolidBefore = statusOf(rec) !== 'solid';
+
+  rec.attempts++;
+  rec.last = nowISO();
+  let feedbackClass, feedbackText;
+
+  if(!correct){
+    rec.streak = 0;
+    rec.wrong++;
+    feedbackClass = 'wrong';
+    feedbackText = isTimeout
+      ? `Time's up — ${currentCard.f1} × ${currentCard.f2} = ${product}`
+      : `Not quite — ${currentCard.f1} × ${currentCard.f2} = ${product}`;
+    deck.push(currentCard);
+  } else {
+    if(currentDrawFirstTry && elapsed <= FAST_MS){
+      rec.streak++;
+      feedbackClass = 'correct';
+      feedbackText = 'Fast & correct!';
+    } else if(elapsed <= FAST_MS){
+      feedbackClass = 'correct';
+      feedbackText = 'Got it!';
+    } else {
+      feedbackClass = 'slow';
+      feedbackText = "Correct — let's get faster";
+    }
+    clearedCount++;
+  }
+  if(wasNotSolidBefore && statusOf(rec) === 'solid'){
+    sessionPromotions.push(currentCard.f1+'×'+currentCard.f2);
+  }
+  sessionAttempted++;
+  saveData();
+  flashFeedback(feedbackClass, feedbackText);
+  setTimeout(()=>{ nextCard(); }, 350);
+}
+
+function flashFeedback(cls, text){
+  const fb = document.getElementById('feedback');
+  if(fb){ fb.className='feedback '+cls; fb.textContent=text; }
+}
+
+function updateQuestionUI(){
+  clearTimeout(wrongFlashTimer);
+  const eq = document.getElementById('equation');
+  if(eq) eq.textContent = `${currentCard.f1} × ${currentCard.f2} = ?`;
+  const input = document.getElementById('answer-input');
+  if(input){
+    input.value = '';
+    if(document.activeElement !== input) input.focus();
+  }
+  const fb = document.getElementById('feedback');
+  if(fb){ fb.className='feedback'; fb.textContent=''; }
+  const fill = document.getElementById('timer-fill');
+  if(fill){ fill.style.width='100%'; fill.classList.remove('late'); }
+  updateProgressLabel();
+}
+function updateProgressLabel(){
+  const el = document.getElementById('progress-label');
+  if(el) el.textContent = `Cleared ${clearedCount} / ${totalToClear}`;
+}
+
+function endStackSessionEarly(){
+  clearInterval(timerHandle);
+  finishStackSession();
+}
+function finishStackSession(){
+  stackEngineActive = false;
+  clearInterval(timerHandle);
+  sessionLog.unshift({
+    ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}),
+    type: stackKind === '20' ? '20 Stack' : 'Whole Stack',
+    detail: `${clearedCount}/${totalToClear} cleared · ${sessionAttempted} attempts`
+  });
+  sessionLog = sessionLog.slice(0,30);
+  saveData();
+  modeTab = 'stack-summary';
+  render();
+}
+
+/* ═══════════ 60-SECOND DRILL ═══════════ */
+const sec = {
+  score:0, total:0, timeLeft:60, timerId:null,
+  currentAnswer:0, opMode:'multiplication', activeOp:'multiplication',
+  currentF1:0, currentF2:0, qStart:0, flagged:[]
 };
 
-function resetCustomDashboardHtml(){
-    window.location.reload();
+function secGenerateProblem(){
+  const f1 = Math.floor(Math.random()*(RANGE.max1-RANGE.min1+1))+RANGE.min1;
+  const f2 = Math.floor(Math.random()*(RANGE.max2-RANGE.min2+1))+RANGE.min2;
+  sec.currentF1 = f1; sec.currentF2 = f2;
+  let op = sec.opMode;
+  if(op === 'mixed') op = Math.random()<0.5 ? 'multiplication' : 'division';
+  sec.activeOp = op;
+  const disp = document.getElementById('sixty-problem');
+  if(op === 'multiplication'){
+    sec.currentAnswer = f1*f2;
+    if(disp) disp.textContent = `${f1} × ${f2}`;
+  } else {
+    const dividend = f1*f2;
+    sec.currentAnswer = f1;
+    if(disp) disp.textContent = `${dividend} ÷ ${f2}`;
+  }
+  const input = document.getElementById('sixty-input');
+  if(input){ input.value=''; if(document.activeElement!==input) input.focus(); }
+  sec.qStart = Date.now();
 }
 
-document.getElementById('c-answer-input').addEventListener('input', () => {
-    const raw = document.getElementById('c-answer-input').value;
-    const val = parseInt(raw);
-    if (!isNaN(val) && val === customEngine.currentAnswer) {
-        customEngine.score++; customEngine.total++;
-        document.getElementById('c-stat-correct').textContent = customEngine.score;
-        document.getElementById('c-stat-accuracy').textContent = Math.round((customEngine.score / customEngine.total) * 100) + '%';
-        document.getElementById('c-feedback-display').style.color = "var(--success)";
-        document.getElementById('c-feedback-display').textContent = "Correct!";
-        customEngine.generateProblem();
-    }
-});
+function secSetOp(m){
+  if(secEngineActive) return;
+  sec.opMode = m;
+  render();
+}
 
-document.getElementById('c-answer-input').addEventListener('keyup', (e) => {
-    if (e.key === 'Enter' && document.getElementById('c-answer-input').value !== '') {
-        const val = parseInt(document.getElementById('c-answer-input').value);
-        if (val !== customEngine.currentAnswer) {
-            customEngine.total++;
-            document.getElementById('c-stat-accuracy').textContent = Math.round((customEngine.score / customEngine.total) * 100) + '%';
-            document.getElementById('c-feedback-display').style.color = "#D85A30";
-            document.getElementById('c-feedback-display').textContent = "Incorrect! Next one.";
-            customEngine.generateProblem();
+function secStart(){
+  secEngineActive = true;
+  sec.score=0; sec.total=0; sec.timeLeft=60; sec.flagged=[];
+  modeTab = 'sixty-play';
+  render();
+  secGenerateProblem();
+  sec.timerId = setInterval(()=>{
+    sec.timeLeft--;
+    const t = document.getElementById('sixty-timer');
+    if(t) t.textContent = sec.timeLeft+'s';
+    if(sec.timeLeft<=0) secEnd();
+  }, 1000);
+}
+
+function secHandleCorrect(){
+  const elapsed = Date.now()-sec.qStart;
+  sec.score++; sec.total++;
+  const rec = getFact(sec.currentF1, sec.currentF2);
+  rec.attempts++;
+  rec.last = nowISO();
+  if(elapsed > SIXTY_FLAG_MS){
+    rec.streak = 0; rec.wrong++;
+    sec.flagged.push({f1:sec.currentF1, f2:sec.currentF2, elapsed, wrong:false});
+  }
+  saveData();
+  secUpdateStatsUI();
+  secGenerateProblem();
+}
+function secHandleWrong(){
+  sec.total++;
+  const rec = getFact(sec.currentF1, sec.currentF2);
+  rec.attempts++; rec.streak=0; rec.wrong++; rec.last = nowISO();
+  sec.flagged.push({f1:sec.currentF1, f2:sec.currentF2, elapsed:Date.now()-sec.qStart, wrong:true});
+  saveData();
+  secUpdateStatsUI();
+  secGenerateProblem();
+}
+function secUpdateStatsUI(){
+  const c = document.getElementById('sixty-correct');
+  const a = document.getElementById('sixty-accuracy');
+  if(c) c.textContent = sec.score;
+  if(a) a.textContent = sec.total ? Math.round(sec.score/sec.total*100)+'%' : '0%';
+}
+function secEnd(){
+  secEngineActive = false;
+  clearInterval(sec.timerId);
+  const acc = sec.total ? Math.round(sec.score/sec.total*100) : 0;
+  sessionLog.unshift({
+    ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}),
+    type: '60 Sec Drill',
+    detail: `${sec.score}/${sec.total} · ${acc}% · ${sec.opMode}`
+  });
+  sessionLog = sessionLog.slice(0,30);
+  saveData();
+  modeTab = 'sixty-summary';
+  render();
+}
+
+/* ═══════════ RENDER ═══════════ */
+function rangeConfigHTML(){
+  const disabled = (stackEngineActive || secEngineActive);
+  return `
+    <div class="card">
+      <p class="card-title">Fact Range</p>
+      <div class="range-grid">
+        <div class="range-group">
+          <label>Factor 1</label>
+          <div class="range-inputs">
+            <input type="number" value="${RANGE.min1}" ${disabled?'disabled':''} onchange="updateRangeField('min1', this.value)">
+            <span class="range-dash">–</span>
+            <input type="number" value="${RANGE.max1}" ${disabled?'disabled':''} onchange="updateRangeField('max1', this.value)">
+          </div>
+        </div>
+        <div class="range-group">
+          <label>Factor 2</label>
+          <div class="range-inputs">
+            <input type="number" value="${RANGE.min2}" ${disabled?'disabled':''} onchange="updateRangeField('min2', this.value)">
+            <span class="range-dash">–</span>
+            <input type="number" value="${RANGE.max2}" ${disabled?'disabled':''} onchange="updateRangeField('max2', this.value)">
+          </div>
+        </div>
+      </div>
+      <div class="presets">
+        <span class="preset-badge" onclick="applyPreset(2,9,2,9)">Single Digits (2-9)</span>
+        <span class="preset-badge" onclick="applyPreset(1,12,1,12)">Classic Tables (1-12)</span>
+        <span class="preset-badge" onclick="applyPreset(11,19,1,9)">Teens Blend</span>
+        <span class="preset-badge" onclick="applyPreset(10,99,2,9)">Double × Single</span>
+      </div>
+    </div>
+  `;
+}
+
+function modeTabsHTML(active){
+  const tabs = [
+    ['60sec','60 Sec Drill'],
+    ['stack20','20 Stack'],
+    ['stackAll','Whole Stack'],
+    ['progress','Progress']
+  ];
+  return `<div class="mode-tabs">${tabs.map(([k,label])=>
+    `<button class="mode-tab ${active===k?'a':''}" onclick="switchModeTab('${k}')">${label}</button>`
+  ).join('')}</div>`;
+}
+
+function switchModeTab(tab){
+  if(stackEngineActive || secEngineActive) return; // must end session first
+  modeTab = tab;
+  render();
+}
+
+function renderMasteryGrid(){
+  const rows1 = RANGE.max1-RANGE.min1+1;
+  const cols2 = RANGE.max2-RANGE.min2+1;
+  if(rows1 * cols2 > 180){
+    const all = allFactsInRange();
+    const needsWork = all.filter(p=>statusOf(p.rec)!=='solid')
+      .sort((a,b)=> b.rec.wrong - a.rec.wrong)
+      .slice(0,16);
+    if(needsWork.length===0){
+      return `<div class="needs-list">Everything in this range is solid. 🎉</div>`;
+    }
+    return `<div class="needs-list">Needs practice:<br>${needsWork.map(p=>`<span class="tag">${p.f1}×${p.f2}</span>`).join('')}</div>`;
+  }
+  let html = '<table class="grid"><tr><th></th>';
+  for(let j=RANGE.min2;j<=RANGE.max2;j++) html += `<th>${j}</th>`;
+  html += '</tr>';
+  for(let i=RANGE.min1;i<=RANGE.max1;i++){
+    html += `<tr><th>${i}</th>`;
+    for(let j=RANGE.min2;j<=RANGE.max2;j++){
+      const rec = getFact(i,j);
+      html += `<td><div class="cell ${statusOf(rec)}"></div></td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+  return html;
+}
+
+function renderLogTable(){
+  if(sessionLog.length===0) return '<p style="font-size:0.78rem;color:var(--ink-soft);">No sessions yet.</p>';
+  return `<div class="tbl-w"><table class="log"><thead><tr><th>Date</th><th>Type</th><th>Result</th></tr></thead><tbody>
+    ${sessionLog.map(r=>`<tr><td>${r.ts}</td><td>${r.type}</td><td>${r.detail}</td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+function render(){
+  const app = document.getElementById('app');
+
+  if(modeTab === 'stack-play'){
+    app.innerHTML = `
+      <header><h1>Multiplication Fluency</h1><p id="progress-label" class="progress-label"></p></header>
+      <div class="practice-card">
+        <div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div>
+        <div class="equation" id="equation"></div>
+        <input type="number" id="answer-input" class="answer" autocomplete="off" inputmode="numeric" />
+        <button class="submit-btn" onclick="attemptSubmit()">Check</button>
+        <div class="feedback" id="feedback"></div>
+      </div>
+      <a class="back-link" onclick="endStackSessionEarly()">End session &amp; see summary</a>
+    `;
+    const input = document.getElementById('answer-input');
+    if(input){
+      input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') attemptSubmit(); });
+      input.addEventListener('input', ()=>{
+        if(resolved || !currentCard) return;
+        const expectedDigits = String(currentCard.f1*currentCard.f2).length;
+        if(input.value.length >= expectedDigits) attemptSubmit();
+      });
+    }
+    return;
+  }
+
+  if(modeTab === 'stack-summary'){
+    app.innerHTML = `
+      <header><h1>Multiplication Fluency</h1></header>
+      <div class="card" style="text-align:center;">
+        <p class="card-title">Session Done</p>
+        <p style="font-size:0.85rem;">${clearedCount} / ${totalToClear} cleared &middot; ${sessionAttempted} total attempts</p>
+        <p style="font-size:0.8rem; color:var(--ink-soft);">${sessionPromotions.length ? 'Promoted to solid: '+sessionPromotions.join(', ') : "No new facts hit solid this time — that's okay."}</p>
+      </div>
+      <div class="card">
+        <p class="card-title">Mastery — Current Range</p>
+        ${renderMasteryGrid()}
+      </div>
+      <a class="back-link" onclick="modeTab='progress';render();">Back to menu</a>
+    `;
+    return;
+  }
+
+  if(modeTab === 'sixty-play'){
+    app.innerHTML = `
+      <header><h1>Multiplication Fluency</h1></header>
+      <div class="practice-card">
+        <div class="sixty-timer" id="sixty-timer">60s</div>
+        <div class="sixty-stats">
+          <span>Correct: <span id="sixty-correct">0</span></span>
+          <span>Accuracy: <span id="sixty-accuracy">0%</span></span>
+        </div>
+        <div class="sixty-problem" id="sixty-problem">? × ?</div>
+        <input type="number" id="sixty-input" class="answer" autocomplete="off" inputmode="numeric" />
+        <div class="sixty-fb" id="sixty-fb"></div>
+      </div>
+    `;
+    const input = document.getElementById('sixty-input');
+    if(input){
+      input.addEventListener('input', ()=>{
+        const val = parseInt(input.value,10);
+        if(!isNaN(val) && val === sec.currentAnswer) secHandleCorrect();
+      });
+      input.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter'){
+          const val = parseInt(input.value,10);
+          if(input.value!=='' && val !== sec.currentAnswer) secHandleWrong();
         }
+      });
     }
-});
-
-
-/* ═══ ENGINE 2: FIXED 12x12 SPRINT SUITE (MOBILE OPTIMIZED) ═══ */
-let DB = JSON.parse(localStorage.getItem('msm_combined_db')) || { log: [] };
-function logSessionToDB(data) {
-    DB.log.unshift({ ts: new Date().toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}), ...data });
-    localStorage.setItem('msm_combined_db', JSON.stringify(DB));
-}
-function clearAllHistory() {
-    if(!confirm('Clear all session logs?')) return;
-    DB = { log: [] }; localStorage.setItem('msm_combined_db', JSON.stringify(DB));
-    renderProgTable();
-}
-
-let X = { stages: [1], timeTarget: 3000, sortMode: 'shuffle', deck: [], initialCount: 0, currentCard: null, ans: false, on: false, tot: 0, cor: 0, streak: 0, hist: [], paused: false, deadline: 0, rem: 3000, tid: null };
-
-function xBuildDeck() {
-  let list = [];
-  for (let i = 1; i <= 12; i++) {
-    for (let j = 1; j <= 12; j++) {
-      let iG = i <= 5 ? 1 : (i <= 9 ? 2 : 3);
-      let jG = j <= 5 ? 1 : (j <= 9 ? 2 : 3);
-      if (X.stages.includes(iG) && X.stages.includes(jG)) {
-        list.push({ f1: i, f2: j, a: i * j });
-      }
-    }
+    return;
   }
-  if (X.sortMode === 'family') {
-    let families = {};
-    list.forEach(card => {
-      if(!families[card.a]) families[card.a] = [];
-      families[card.a].push(card);
+
+  if(modeTab === 'sixty-summary'){
+    const acc = sec.total ? Math.round(sec.score/sec.total*100) : 0;
+    const uniqueFlags = {};
+    sec.flagged.forEach(f=>{
+      const k = factKey(f.f1,f.f2);
+      if(!uniqueFlags[k] || f.wrong) uniqueFlags[k] = f;
     });
-    let sortedKeys = Object.keys(families).sort(() => Math.random() - 0.5);
-    let bundledList = [];
-    sortedKeys.forEach(key => { bundledList.push(...families[key].sort(() => Math.random() - 0.5)); });
-    return bundledList;
+    const flagList = Object.values(uniqueFlags);
+    app.innerHTML = `
+      <header><h1>Multiplication Fluency</h1></header>
+      <div class="card" style="text-align:center;">
+        <p class="card-title">Drill Complete</p>
+        <p style="font-size:0.85rem;">${sec.score} correct out of ${sec.total} &middot; ${acc}% accuracy</p>
+        ${flagList.length ? `<div class="needs-list" style="text-align:left;margin-top:8px;">Flagged (slow or wrong):<br>${flagList.map(f=>`<span class="tag">${f.f1}×${f.f2}${f.wrong?' ✕':' '+(f.elapsed/1000).toFixed(1)+'s'}</span>`).join('')}</div>` : '<p style="font-size:0.78rem;color:var(--ink-soft);">Nothing flagged — nice work.</p>'}
+      </div>
+      <a class="back-link" onclick="modeTab='60sec';render();">Back to menu</a>
+    `;
+    return;
   }
-  return list.sort(() => Math.random() - 0.5);
-}
 
-function xReady(){
-  xStopTimer(); X.on=false; X.paused=false;
-  document.getElementById('x-pau-btn').style.display='none';
-  document.getElementById('x-pau-btn').textContent='pause';
-  document.getElementById('x-tmr').style.visibility='hidden';
-  document.getElementById('x-streak').textContent='0';
-  document.getElementById('x-ac').textContent='—';
-  document.getElementById('x-ct').textContent='0';
-  document.getElementById('x-disp').textContent = 'Ready?';
-  
-  const inputEl = document.getElementById('x-answer-input');
-  inputEl.style.display = 'none';
-  inputEl.value = '';
-  document.getElementById('x-fb').textContent='';
-  
-  const pm = document.getElementById('p-mark'); if(pm) pm.remove();
+  // menu-style tabs share range config + tab nav
+  let body = rangeConfigHTML() + modeTabsHTML(modeTab);
 
-  X.deck = xBuildDeck(); X.initialCount = X.deck.length;
-  
-  const goBtn = document.getElementById('x-go');
-  goBtn.style.display = 'inline-block';
-  if(X.initialCount === 0) {
-     goBtn.textContent = 'Select factor subset'; goBtn.disabled = true; goBtn.style.opacity = '0.5';
-  } else {
-     goBtn.textContent = 'start sprint'; goBtn.disabled = false; goBtn.style.opacity = '1';
+  if(modeTab === '60sec'){
+    body += `
+      <div class="card">
+        <p class="card-title">Operation</p>
+        <div class="seg">
+          <button class="${sec.opMode==='multiplication'?'a':''}" onclick="secSetOp('multiplication')">Multiplication</button>
+          <button class="${sec.opMode==='division'?'a':''}" onclick="secSetOp('division')">Division</button>
+          <button class="${sec.opMode==='mixed'?'a':''}" onclick="secSetOp('mixed')">Mixed</button>
+        </div>
+        <p class="hint">60 seconds, unlimited questions. Anything answered correctly but slower than 3 sec (or wrong) gets flagged and knocked back to shaky in the mastery data.</p>
+        <button class="btn" onclick="secStart()">Start 60s Drill</button>
+      </div>
+    `;
+  } else if(modeTab === 'stack20'){
+    const c = rangeCounts();
+    body += `
+      <div class="card">
+        <p class="card-title">20 Stack</p>
+        <p class="hint">Pulls 20 facts weighted toward new &amp; shaky, plus anything mastered but not seen in ${REVIEW_DAYS}+ days. 3 sec per card, retry allowed until time runs out.</p>
+        <div class="stats-row">
+          <span class="stat-pill"><span class="dot new"></span>${c.n} new</span>
+          <span class="stat-pill"><span class="dot shaky"></span>${c.s} shaky</span>
+          <span class="stat-pill"><span class="dot solid"></span>${c.solid} solid</span>
+        </div>
+        <button class="btn drill" onclick="startStack('20')">Start 20 Stack</button>
+      </div>
+    `;
+  } else if(modeTab === 'stackAll'){
+    const c = rangeCounts();
+    body += `
+      <div class="card">
+        <p class="card-title">Whole Stack</p>
+        <p class="hint">All ${c.total} facts in the current range, shuffled. Same timing &amp; mastery rules as 20 Stack.</p>
+        <button class="btn drill" onclick="startStack('all')">Start Whole Stack (${c.total})</button>
+      </div>
+    `;
+  } else if(modeTab === 'progress'){
+    const c = rangeCounts();
+    body += `
+      <div class="card">
+        <p class="card-title">Mastery — Current Range</p>
+        <div class="stats-row">
+          <span class="stat-pill"><span class="dot new"></span>${c.n} new</span>
+          <span class="stat-pill"><span class="dot shaky"></span>${c.s} shaky</span>
+          <span class="stat-pill"><span class="dot solid"></span>${c.solid} solid</span>
+        </div>
+        ${renderMasteryGrid()}
+      </div>
+      <div class="card">
+        <p class="card-title">Session Log</p>
+        ${renderLogTable()}
+      </div>
+      <a class="back-link" onclick="clearAllData()">Reset all progress &amp; history</a>
+    `;
   }
-  updateFixedProgressUI();
+
+  app.innerHTML = `<header><h1>Multiplication Fluency</h1></header>` + body;
 }
 
-function xStart(){
-  if(X.deck.length === 0) return;
-  X.tot=0; X.cor=0; X.streak=0; X.hist=[]; X.on=true; X.paused=false; X.initialCount = X.deck.length;
-  document.getElementById('x-pr').innerHTML='';
-  document.getElementById('x-go').style.display='none';
-  document.getElementById('x-pau-btn').style.display='inline-block';
-  document.getElementById('x-tmr').style.visibility='visible';
-  xNext();
-}
-
-function xNext(){
-  if(!X.on){ xReady(); return; }
-  if(X.deck.length===0){ xEnd(true); return; }
-  X.ans=false; X.currentCard = X.deck[0];
-  
-  document.getElementById('x-disp').textContent = `${X.currentCard.f1} × ${X.currentCard.f2}`;
-  
-  const inputEl = document.getElementById('x-answer-input');
-  inputEl.style.display = 'block';
-  inputEl.value = '';
-  inputEl.focus();
-  
-  document.getElementById('x-fb').textContent='';
-  
-  xStartTimer();
-}
-
-// Mobile Input Evaluation Listener
-document.getElementById('x-answer-input').addEventListener('input', function() {
-  if(!X.on || X.ans || X.paused) return;
-  
-  const rawInput = this.value.trim();
-  const targetAns = X.currentCard.a.toString();
-  
-  if(rawInput === targetAns) { 
-    xEvaluateInput(true); 
-  } else if (rawInput.length >= targetAns.length) { 
-    xEvaluateInput(false); 
-  }
-});
-
-function xEvaluateInput(isCorrect) {
-  xStopTimer(); X.ans = true; X.tot++;
-  const fb = document.getElementById('x-fb');
-  
-  if(isCorrect) {
-    X.cor++; X.streak++; fb.textContent='✓'; fb.className='fb ok'; X.hist.push('c'); X.deck.shift();
-  } else {
-    X.streak = 0; fb.textContent=X.currentCard.a; fb.className='fb-large'; X.hist.push('w'); X.deck.push(X.deck.shift());
-  }
-  
-  updateFixedStatsUI();
-  document.getElementById('x-pr').innerHTML=X.hist.slice(-44).map(h=>`<div class="dot ${h}"></div>`).join('');
-  setTimeout(xNext, isCorrect ? 300 : 1000);
-}
-
-function xStartTimer(){ xStopTimer(); X.rem = X.timeTarget; X.deadline = Date.now() + X.timeTarget; xTick(); X.tid = setInterval(xTick, 40); }
-function xStopTimer(){ if(X.tid){clearInterval(X.tid); X.tid=null;} }
-
-function xTick(){
-  if(X.paused) return;
-  const l = Math.max(0, X.deadline - Date.now()); X.rem = l;
-  const el = document.getElementById('x-tmr');
-  const deg = Math.max(0, Math.min(360, (l / X.timeTarget) * 360));
-  el.style.background = `conic-gradient(var(--primary) ${deg}deg, #e5e7eb 0deg)`;
-  if(l <= 0 && X.on && !X.ans) { xTimeoutFail(); }
-}
-
-function xTimeoutFail(){
-  xStopTimer(); X.ans = true; X.tot++; X.streak = 0;
-  const fb = document.getElementById('x-fb');
-  fb.textContent = X.currentCard.a; fb.className = 'fb-large';
-  X.hist.push('w'); X.deck.push(X.deck.shift());
-  updateFixedStatsUI();
-  document.getElementById('x-pr').innerHTML=X.hist.slice(-44).map(h=>`<div class="dot ${h}"></div>`).join('');
-  setTimeout(xNext, 1000);
-}
-
-function xTogglePause(){
-  if(!X.on) return;
-  const inputEl = document.getElementById('x-answer-input');
-  if(X.paused) {
-    X.paused = false; X.deadline = Date.now() + X.rem;
-    document.getElementById('x-pau-btn').textContent = 'pause';
-    document.getElementById('x-disp').style.display = 'block';
-    inputEl.style.display = 'block';
-    inputEl.focus();
-    const pm = document.getElementById('p-mark'); if(pm) pm.remove();
-    xTick(); X.tid = setInterval(xTick, 40);
-  } else {
-    X.rem = Math.max(0, X.deadline - Date.now()); X.paused = true; xStopTimer();
-    document.getElementById('x-tmr').style.background = '#e5e7eb';
-    document.getElementById('x-pau-btn').textContent = 'resume';
-    document.getElementById('x-disp').style.display = 'none'; 
-    inputEl.style.display = 'none';
-    
-    let pDiv = document.createElement('div'); pDiv.id = "p-mark";
-    pDiv.innerHTML = '<div style="font-size:22px; font-weight:600; color:#6b7280; margin:2rem 0;">Paused</div>';
-    document.getElementById('x-content-box').appendChild(pDiv);
-  }
-}
-
-function xEnd(completed) {
-  X.on = false; xStopTimer();
-  document.getElementById('x-pau-btn').style.display='none';
-  document.getElementById('x-tmr').style.visibility='hidden';
-  document.getElementById('x-answer-input').style.display='none';
-  
-  const acc = X.tot ? Math.round(X.cor / X.tot * 100) : 0;
-  let msg = `Session Logged: ${X.cor}/${X.tot} responses (${acc}%)`;
-  if(completed && acc === 100) msg = `🎯 Perfect Mastery Sprint Cleared!`;
-  
-  document.getElementById('x-disp').textContent = msg;
-  document.getElementById('x-go').style.display='inline-block'; document.getElementById('x-go').textContent='restart sprint';
-  
-  let details = `${X.sortMode.toUpperCase()} | Subsets:[${X.stages.join(',')}] | ${(X.timeTarget/1000)}s`;
-  logSessionToDB({ cor: X.cor, tot: X.tot, acc: acc, stage: details, type: '12x12 Sprint' });
-  updateFixedProgressUI();
-}
-
-function xSetMode(m) { if(X.on) return; X.sortMode = m; document.getElementById('xm-shuffle').classList.toggle('a', m === 'shuffle'); document.getElementById('xm-family').classList.toggle('a', m === 'family'); xReady(); }
-function xSetTime(ms) { if(X.on) return; X.timeTarget = ms; [2000, 3000, 4000, 5000].forEach(v => { document.getElementById('xt' + (v/1000)).classList.toggle('a', v === ms); }); }
-function xToggleStage(s) {
-  if(X.on) return;
-  if(X.stages.includes(s)) {
-    if(X.stages.length > 1) { X.stages = X.stages.filter(x => x !== s); document.getElementById('xs'+s).classList.remove('a'); }
-  } else { X.stages.push(s); document.getElementById('xs'+s).classList.add('a'); }
-  xReady();
-}
-
-function updateFixedStatsUI(){
-  const acc = X.tot ? Math.round(X.cor / X.tot * 100) : 0;
-  document.getElementById('x-streak').textContent = X.streak;
-  document.getElementById('x-ac').textContent = X.tot ? acc + '%' : '—';
-  document.getElementById('x-ct').textContent = X.tot;
-  updateFixedProgressUI();
-}
-
-function updateFixedProgressUI(){
-  const processed = X.initialCount - X.deck.length;
-  document.getElementById('x-pt').textContent = `${processed} of ${X.initialCount} clear`;
-  const pct = X.initialCount ? Math.round((processed / X.initialCount) * 100) : 0;
-  document.getElementById('x-pf').style.width = pct + '%';
-}
-
-function renderProgTable(){
-  const tb = document.getElementById('p-body');
-  if(!DB.log || DB.log.length===0){
-    tb.innerHTML = '<tr><td colspan="4" class="d">No sessions completed yet.</td></tr>'; return;
-  }
-  tb.innerHTML = DB.log.map(r => {
-     const ok = r.acc === 100 && r.cor >= r.tot;
-     return `<tr>
-       <td style="white-space:nowrap; font-size:12px; color:var(--text-light);">${r.ts}</td>
-       <td style="font-weight:500;">${r.type || 'Sprint'}</td>
-       <td><span class="${ok ? 'g' : 'b'}">${r.cor}/${r.tot} · ${r.acc}%</span></td>
-       <td style="font-size:12px; color:var(--text-light);">${r.stage}</td>
-     </tr>`;
-  }).join('');
-}
-
-/* INITIAL RUN SEEDING */
-xReady();
+loadData();
 </script>
 </body>
 </html>
