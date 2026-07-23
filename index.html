@@ -164,11 +164,11 @@ let stackEngineActive = false;
 let secEngineActive = false;
 
 /* ═══ persistence ═══ */
-async function loadData(){
+function loadData(){
   try{
-    const res = await window.storage.get(STORAGE_KEY, false);
-    if(res && res.value){
-      const parsed = JSON.parse(res.value);
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
       factsDB = parsed.facts || {};
       sessionLog = parsed.log || [];
       if(parsed.range) RANGE = parsed.range;
@@ -177,15 +177,15 @@ async function loadData(){
   } catch(e){ /* nothing saved yet */ }
   render();
 }
-async function saveData(){
+function saveData(){
   try{
-    await window.storage.set(STORAGE_KEY, JSON.stringify({facts:factsDB, log:sessionLog, range:RANGE, opMode:OP_MODE}), false);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({facts:factsDB, log:sessionLog, range:RANGE, opMode:OP_MODE}));
   } catch(e){ console.error('save failed', e); }
 }
-async function clearAllData(){
+function clearAllData(){
   if(!window.confirm('Clear all progress and history? This cannot be undone.')) return;
   factsDB = {}; sessionLog = [];
-  await saveData();
+  saveData();
   render();
 }
 
